@@ -1082,6 +1082,37 @@
 
   <div class="al al-w"><div class="ai">⚠️</div><div><strong>זכרו:</strong> חום יולי בספרד מגיע ל-30°C+. כובע חובה, ישיבה בצל, אל תישארו יותר מ-4-5 שעות.</div></div>
   <div class="al al-ok"><div class="ai">✅</div><div>פסטיבל Vida ידוע בפחות עומס מפסטיבלים אחרים - אווירה רגועה, יערית ונעימה. מתאים לזוגות!</div></div>
+
+  <!-- COUNTDOWN -->
+  <div style="background:linear-gradient(135deg,#1a1a2e,#6a0dad);border-radius:18px;padding:20px;color:white;margin-bottom:14px;text-align:center;">
+    <div style="font-size:0.82rem;opacity:.75;margin-bottom:10px;">⏳ הפסטיבל מתחיל בעוד</div>
+    <div id="festCountdown" style="display:flex;justify-content:center;gap:12px;"></div>
+    <div style="font-size:0.74rem;opacity:.55;margin-top:10px;">2 ביולי 2026 · 16:00 · Vilanova i la Geltrú</div>
+  </div>
+
+  <!-- SPOTIFY PLAYLIST -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e8f5e9;">🎧</div><h3>הפלייליסט הרשמי VIDA 2026</h3></div>
+    <p style="font-size:0.79rem;color:var(--muted);margin-bottom:10px;">כל האמנים של הפסטיבל - הכינו את האוזניים!</p>
+    <iframe style="border-radius:12px;width:100%;border:none;" src="https://open.spotify.com/embed/playlist/1yl00mf2rY777TYCkufDtB?utm_source=generator&theme=0" height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+
+  <!-- PACKING LIST -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fff3e0;">🎒</div><h3>מה לארוז לפסטיבל - הריון שבוע 12</h3></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;">
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ בקבוק מים 1.5L</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ כובע רחב שוליים</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ קרם SPF 50+</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ אוזניות מגן</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ שמיכה לשבת</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ חטיפים בטוחים</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ נעליים נוחות</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#f0fff4;border-radius:9px;display:flex;gap:6px;align-items:center;">✅ ספריי יתושים</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#ffe8e8;border-radius:9px;display:flex;gap:6px;align-items:center;">🚫 אלכוהול</div>
+      <div style="font-size:0.8rem;padding:8px 10px;background:#ffe8e8;border-radius:9px;display:flex;gap:6px;align-items:center;">🚫 עמידה שעות</div>
+    </div>
+  </div>
 </div>
 
 <footer>מדריך ספרד להריון · וילאנובה אי לה גלטרו · נסיעה נעימה!<br>המידע כללי בלבד - התייעצו עם הרופא שלכם</footer>
@@ -1610,6 +1641,24 @@ function initMap(){
       .bindPopup(`<strong>${p.name}</strong><br>${p.info}`);
   });
 }
+
+// ── FESTIVAL COUNTDOWN ──────────────────────────────────────
+function updateCountdown(){
+  const el=document.getElementById('festCountdown');
+  if(!el)return;
+  const fest=new Date('2026-07-02T16:00:00+02:00');
+  const now=new Date();
+  const diff=fest-now;
+  if(diff<=0){el.innerHTML='<div style="font-size:1.1rem;font-weight:800;">🎵 הפסטיבל מתחיל עכשיו!</div>';return;}
+  const d=Math.floor(diff/864e5);
+  const h=Math.floor((diff%864e5)/36e5);
+  const m=Math.floor((diff%36e5)/6e4);
+  const s=Math.floor((diff%6e4)/1e3);
+  const box=(n,l)=>`<div style="background:rgba(255,255,255,.15);border-radius:12px;padding:10px 14px;min-width:52px;"><div style="font-size:1.5rem;font-weight:900;line-height:1;">${String(n).padStart(2,'0')}</div><div style="font-size:0.65rem;opacity:.7;margin-top:2px;">${l}</div></div>`;
+  el.innerHTML=box(d,'ימים')+box(h,'שעות')+box(m,'דקות')+box(s,'שניות');
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
 
 // ── INIT ─────────────────────────────────────────────────────
 setLoc(DEF.city,DEF.sub);
