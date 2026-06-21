@@ -807,6 +807,9 @@
     <div class="al al-ok" style="margin-top:9px;"><div class="ai">❄️</div><div>מיזוג מעולה - מושלם לקניות בחום יולי בהריון!</div></div>
   </div>
 
+  <!-- SHOPS MAP -->
+  <div id="shopsStaticMapEl" style="height:240px;border-radius:var(--r);margin-bottom:12px;z-index:1;"></div>
+
   <!-- LIVE SEARCH -->
   <div class="shop-search-box">
     <h3 style="font-size:0.93rem;font-weight:700;margin-bottom:10px;">חפשו חנות על המפה</h3>
@@ -1014,6 +1017,7 @@
 <!-- ══════════════ TRANSPORT ══════════════ -->
 <div class="sec" id="sec-trans">
   <div class="sec-hd"><h2>תחבורה מוילאנובה</h2><p>לברצלונה, סיטג'ס וכל ספרד</p></div>
+  <div id="transMapEl" style="height:240px;border-radius:var(--r);margin-bottom:12px;z-index:1;"></div>
 
   <div class="card">
     <div class="card-hd"><div class="ic" style="background:#fce4ec;">🚆</div><h3>רכבות - Rodalies / Renfe</h3></div>
@@ -1621,17 +1625,23 @@ function applyMan(){const v=document.getElementById('manAddr').value.trim();if(!
 function resetVil(){setLoc(DEF.city,DEF.sub);document.getElementById('manAddr').value='';document.getElementById('manBox').style.display='none';showSt('חזרתם לוילאנובה','ls-ok');}
 
 // ── TABS ────────────────────────────────────────────────────
+const mapRefs={};
 function go(name,el){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.getElementById('sec-'+name).classList.add('on');
   el.classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
-  if(name==='cities')initMap();
-  if(name==='fest')initFestMap();
-  if(name==='rest')initRestMap();
-  if(name==='attr')initAttrMap();
-  if(name==='med')initMedMap();
+  // init maps after div is visible, then invalidate size
+  setTimeout(()=>{
+    if(name==='cities'){initMap(); mapRefs.cities&&mapRefs.cities.invalidateSize();}
+    if(name==='fest'){initFestMap(); mapRefs.fest&&mapRefs.fest.invalidateSize();}
+    if(name==='rest'){initRestMap(); mapRefs.rest&&mapRefs.rest.invalidateSize();}
+    if(name==='attr'){initAttrMap(); mapRefs.attr&&mapRefs.attr.invalidateSize();}
+    if(name==='med'){initMedMap(); mapRefs.med&&mapRefs.med.invalidateSize();}
+    if(name==='shops'){initShopsStaticMap(); mapRefs.shopsStatic&&mapRefs.shopsStatic.invalidateSize();}
+    if(name==='trans'){initTransMap(); mapRefs.trans&&mapRefs.trans.invalidateSize();}
+  },50);
 }
 
 // ── TOGGLES ─────────────────────────────────────────────────
@@ -1842,11 +1852,10 @@ function buildPlan(){
 }
 
 // ── MAP ─────────────────────────────────────────────────────
-let mapInited=false;
 function initMap(){
-  if(mapInited)return;
-  mapInited=true;
+  if(mapRefs.cities)return;
   const map=L.map('mapEl').setView([41.22,1.72],9);
+  mapRefs.cities=map;
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© OpenStreetMap',maxZoom:18
   }).addTo(map);
@@ -1870,53 +1879,76 @@ function initMap(){
   });
 }
 
-// ── RESTAURANTS MAP ─────────────────────────────────────────
-let restMapInited=false;
-function initRestMap(){
-  if(restMapInited)return; restMapInited=true;
-  const m=L.map('restMapEl').setView([41.2245,1.7260],15);
+// helper: build a Leaflet map with pins
+function buildMap(elId,center,zoom,pins){
+  const m=L.map(elId).setView(center,zoom);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
-  [{lat:41.2236,lon:1.7277,e:'🐟',c:'#2ec4b6',n:'1918 Cuina de Mar',i:'דגים על הנמל · מומלץ'},
-   {lat:41.2244,lon:1.7258,e:'🔥',c:'#e63950',n:'La Cova del Foc',i:'קטלאני · תנור עצים'},
-   {lat:41.2248,lon:1.7262,e:'🥘',c:'#4caf50',n:'El Giraldillo',i:'טאפאס קלאסיות'},
-   {lat:41.2246,lon:1.7255,e:'🍕',c:'#ff9800',n:'Gula Gula',i:'פיצה ופסטות'},
-  ].forEach(p=>{
-    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
-    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
+  pins.forEach(p=>{
+    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,.35);border:2px solid white;">${p.e}</div>`,iconSize:[34,34],iconAnchor:[17,17]});
+    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br><span style="font-size:0.82rem;color:#555;">${p.i}</span>`);
   });
+  return m;
+}
+
+// ── RESTAURANTS MAP ─────────────────────────────────────────
+function initRestMap(){
+  if(mapRefs.rest)return;
+  mapRefs.rest=buildMap('restMapEl',[41.2242,1.7262],15,[
+    {lat:41.2236,lon:1.7277,e:'🐟',c:'#2ec4b6',n:'1918 Cuina de Mar',i:'דגים על הנמל · מומלץ'},
+    {lat:41.2244,lon:1.7258,e:'🔥',c:'#e63950',n:'La Cova del Foc',i:'קטלאני · תנור עצים'},
+    {lat:41.2248,lon:1.7262,e:'🥘',c:'#4caf50',n:'El Giraldillo',i:'טאפאס קלאסיות'},
+    {lat:41.2246,lon:1.7255,e:'🍕',c:'#ff9800',n:'Gula Gula',i:'פיצה ופסטות'},
+  ]);
 }
 
 // ── ATTRACTIONS MAP ──────────────────────────────────────────
-let attrMapInited=false;
 function initAttrMap(){
-  if(attrMapInited)return; attrMapInited=true;
-  const m=L.map('attrMapEl').setView([41.2235,1.7250],14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
-  [{lat:41.2210,lon:1.7180,e:'🏖️',c:'#2ec4b6',n:'Platja de Ribes Roges',i:'החוף הראשי · 4 ק"מ'},
-   {lat:41.2243,lon:1.7251,e:'🚂',c:'#764ba2',n:'Museu del Ferrocarril',i:'מוזיאון רכבות · מזגן'},
-   {lat:41.2242,lon:1.7248,e:'🏛️',c:'#e63950',n:'Museu Víctor Balaguer',i:'מוזיאון קטלוני · חינם סופ"ש'},
-   {lat:41.2249,lon:1.7258,e:'🌆',c:'#f4a261',n:'Rambla Principal',i:'שדרה ראשית · קפה · קניות'},
-   {lat:41.2190,lon:1.7290,e:'⚓',c:'#0077b6',n:'Port de Vilanova',i:'נמל · מסעדות · טיילת'},
-  ].forEach(p=>{
-    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
-    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
-  });
+  if(mapRefs.attr)return;
+  mapRefs.attr=buildMap('attrMapEl',[41.2230,1.7240],14,[
+    {lat:41.2210,lon:1.7180,e:'🏖️',c:'#2ec4b6',n:'Platja de Ribes Roges',i:'החוף הראשי · 4 ק"מ'},
+    {lat:41.2243,lon:1.7251,e:'🚂',c:'#764ba2',n:'Museu del Ferrocarril',i:'מוזיאון רכבות · מזגן'},
+    {lat:41.2242,lon:1.7248,e:'🏛️',c:'#e63950',n:'Museu Víctor Balaguer',i:'מוזיאון קטלוני · חינם סופ"ש'},
+    {lat:41.2249,lon:1.7258,e:'🌆',c:'#f4a261',n:'Rambla Principal',i:'שדרה ראשית · קפה · קניות'},
+    {lat:41.2190,lon:1.7290,e:'⚓',c:'#0077b6',n:'Port de Vilanova',i:'נמל · מסעדות · טיילת'},
+    {lat:41.2267,lon:1.7213,e:'🏰',c:'#795548',n:'Castellet Castle',i:'טירה מהמאה ה-10 · נוף פנורמי'},
+  ]);
 }
 
 // ── MEDICAL MAP ──────────────────────────────────────────────
-let medMapInited=false;
 function initMedMap(){
-  if(medMapInited)return; medMapInited=true;
-  const m=L.map('medMapEl').setView([41.2248,1.7260],14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
-  [{lat:41.2262,lon:1.7202,e:'🏥',c:'#c62828',n:'Hospital Sant Antoni Abat',i:'בית חולים מרכזי · חירום'},
-   {lat:41.2250,lon:1.7255,e:'💊',c:'#2e7d32',n:'Farmacia Granda',i:'בית מרקחת · ויטמינים הריון'},
-   {lat:41.2245,lon:1.7262,e:'💊',c:'#2e7d32',n:'Farmacia Centre',i:'בית מרקחת · מרכז העיר'},
-   {lat:41.2238,lon:1.7270,e:'🚑',c:'#e63950',n:'CAP Vilanova',i:'מרכז רפואי ראשוני · ביטוח'},
-  ].forEach(p=>{
-    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
-    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
-  });
+  if(mapRefs.med)return;
+  mapRefs.med=buildMap('medMapEl',[41.2248,1.7250],15,[
+    {lat:41.2262,lon:1.7202,e:'🏥',c:'#c62828',n:'Hospital Sant Antoni Abat',i:'בית חולים · חירום 24/7'},
+    {lat:41.2250,lon:1.7255,e:'💊',c:'#2e7d32',n:'Farmacia Granda',i:'בית מרקחת · ויטמינים הריון'},
+    {lat:41.2245,lon:1.7262,e:'💊',c:'#2e7d32',n:'Farmacia Centre',i:'בית מרקחת · מרכז העיר'},
+    {lat:41.2238,lon:1.7270,e:'🚑',c:'#e63950',n:'CAP Vilanova',i:'מרכז רפואי ראשוני'},
+  ]);
+}
+
+// ── SHOPS STATIC MAP ─────────────────────────────────────────
+function initShopsStaticMap(){
+  if(mapRefs.shopsStatic)return;
+  mapRefs.shopsStatic=buildMap('shopsStaticMapEl',[41.2248,1.7258],15,[
+    {lat:41.2252,lon:1.7240,e:'🛒',c:'#1565c0',n:'Mercadona',i:'סופרמרקט · Carrer Miquel Guansé 3'},
+    {lat:41.2249,lon:1.7258,e:'👗',c:'#e63950',n:'Zara / Rambla',i:'בגדים · Rambla Principal'},
+    {lat:41.2247,lon:1.7256,e:'👙',c:'#9c27b0',n:'Tezenis',i:'בגדי ים · Rambla Principal 57'},
+    {lat:41.2251,lon:1.7262,e:'👶',c:'#ff9800',n:'Okaidi',i:'בגדי תינוקות · Rambla Principal 65'},
+    {lat:41.2244,lon:1.7250,e:'🌿',c:'#4caf50',n:'Som Llavors',i:'מוצרי הריון טבעיים'},
+    {lat:41.2255,lon:1.7235,e:'🏬',c:'#764ba2',n:"L'Espai - מרכז קניות",i:'Zara, H&M, Mercadona, אוכל'},
+    {lat:41.2246,lon:1.7253,e:'💊',c:'#2e7d32',n:'Farmacia',i:'בית מרקחת · צלב ירוק בחלון'},
+    {lat:41.2242,lon:1.7265,e:'🧺',c:'#795548',n:'Mercat Municipal',i:'שוק מזון · 08:00-14:00'},
+  ]);
+}
+
+// ── TRANSPORT MAP ────────────────────────────────────────────
+function initTransMap(){
+  if(mapRefs.trans)return;
+  mapRefs.trans=buildMap('transMapEl',[41.2248,1.7255],14,[
+    {lat:41.2253,lon:1.7237,e:'🚆',c:'#e63950',n:'תחנת רכבת Vilanova',i:'R2S · לברצלונה, סיטגס, טרגונה'},
+    {lat:41.2249,lon:1.7258,e:'🚌',c:'#1565c0',n:'תחנת אוטובוס מרכזית',i:'Rambla Principal · קווים אזוריים'},
+    {lat:41.2236,lon:1.7277,e:'🚕',c:'#f4a261',n:'תחנת מוניות - נמל',i:'Cabify / Uber · זמין 24/7'},
+    {lat:41.2245,lon:1.7245,e:'🅿️',c:'#555',n:'חניון מרכזי',i:'Carrer de l\'Estació · €1.50/שעה'},
+  ]);
 }
 
 // ── FESTIVAL MAP ────────────────────────────────────────────
