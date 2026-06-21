@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+  <title>מסע בספרד - מדריך הריון</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+    :root{
+      --red:#e63950;--red2:#c0202f;--orange:#f4a261;--teal:#2ec4b6;
+      --bg:#f7f4f1;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+      --sh:0 2px 14px rgba(0,0,0,0.08);--r:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Heebo',Arial,sans-serif;background:var(--bg);color:var(--text);direction:rtl;padding-bottom:30px;}
+
+    /* HERO */
+    .hero{background:linear-gradient(140deg,#b5192a 0%,#e63950 45%,#f4a261 100%);padding:24px 18px 0;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-80px;right:-60px;width:260px;height:260px;background:rgba(255,255,255,0.06);border-radius:50%;}
+    .hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:30px;font-size:0.78rem;font-weight:700;}
+    .pill-w{background:rgba(255,255,255,0.22);color:white;}
+    .pill-s{background:rgba(0,0,0,0.22);color:white;}
+    .pill-s a{color:white;text-decoration:none;}
+    .hero h1{font-size:2rem;font-weight:900;color:white;line-height:1.15;margin-bottom:4px;position:relative;z-index:1;}
+    .hero-sub{color:rgba(255,255,255,0.8);font-size:0.88rem;margin-bottom:18px;}
+
+    /* SEARCH BAR in hero */
+    .search-hero{position:relative;margin-bottom:14px;z-index:2;}
+    .search-hero input{
+      width:100%;padding:14px 44px 14px 16px;border:none;border-radius:14px;
+      font-size:0.95rem;direction:rtl;font-family:inherit;outline:none;
+      color:var(--text);box-shadow:0 4px 20px rgba(0,0,0,0.15);
+    }
+    .search-hero .si{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.1rem;pointer-events:none;}
+    .search-results{
+      position:absolute;top:calc(100% + 4px);right:0;left:0;
+      background:white;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,0.14);
+      max-height:260px;overflow-y:auto;z-index:200;display:none;
+    }
+    .sr-item{padding:11px 16px;border-bottom:1px solid #f5f2ee;cursor:pointer;font-size:0.88rem;}
+    .sr-item:last-child{border-bottom:none;}
+    .sr-item:hover{background:#fef6f3;}
+    .sr-item .sri-cat{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+    /* LOC CARD */
+    .loc-card{background:white;border-radius:20px 20px 0 0;padding:15px 17px;box-shadow:0 -4px 20px rgba(0,0,0,0.12);position:relative;z-index:2;}
+    .loc-row{display:flex;align-items:center;gap:11px;}
+    .loc-dot{width:42px;height:42px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,#e63950,#f4a261);display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+    .loc-texts .lbl{font-size:0.7rem;color:var(--muted);}
+    .loc-texts .city{font-size:0.96rem;font-weight:800;}
+    .loc-texts .sub{font-size:0.74rem;color:var(--muted);}
+    .gps-btn{margin-right:auto;margin-left:0;background:linear-gradient(135deg,#e63950,#f4a261);color:white;border:none;border-radius:12px;padding:9px 13px;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;}
+    .loc-status{margin-top:7px;padding:6px 11px;border-radius:9px;font-size:0.76rem;display:none;}
+    .ls-ok{background:#e8f5e9;color:#2e7d32;display:block;}
+    .ls-err{background:#ffebee;color:#c62828;display:block;}
+    .ls-w{background:#fff8e1;color:#e65100;display:block;}
+    .mt-btn{background:none;border:none;cursor:pointer;font-size:0.73rem;color:var(--muted);font-family:inherit;margin-top:7px;}
+    .man-box{display:none;margin-top:9px;}
+    .man-box input{width:100%;padding:10px 13px;border:2px solid #e0dcd6;border-radius:12px;font-size:0.9rem;direction:rtl;font-family:inherit;outline:none;margin-bottom:8px;}
+    .man-box input:focus{border-color:var(--red);}
+
+    /* TABS */
+    .tabs{position:sticky;top:0;z-index:100;background:white;display:flex;overflow-x:auto;border-bottom:2px solid #ede9e3;box-shadow:0 2px 10px rgba(0,0,0,0.06);scrollbar-width:none;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab{flex:0 0 auto;padding:12px 16px;font-size:0.83rem;font-weight:600;font-family:inherit;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;}
+    .tab.on{color:var(--red);border-bottom-color:var(--red);}
+
+    /* SECTIONS */
+    .sec{display:none;padding:16px 14px;}
+    .sec.on{display:block;}
+    .sec-hd{margin-bottom:15px;}
+    .sec-hd h2{font-size:1.22rem;font-weight:800;}
+    .sec-hd p{font-size:0.81rem;color:var(--muted);margin-top:2px;}
+
+    /* CARD */
+    .card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;box-shadow:var(--sh);}
+    .card-hd{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
+    .card-hd .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .card-hd h3{font-size:0.95rem;font-weight:700;}
+    .card>p{font-size:0.83rem;color:var(--muted);line-height:1.5;}
+
+    /* ALERTS */
+    .al{border-radius:13px;padding:11px 13px;margin-bottom:12px;font-size:0.82rem;line-height:1.5;display:flex;gap:8px;align-items:flex-start;}
+    .al .ai{font-size:1rem;flex-shrink:0;margin-top:1px;}
+    .al-w{background:#fff8e1;border-right:4px solid #ffc107;color:#5d4037;}
+    .al-ok{background:#e8f5e9;border-right:4px solid #4caf50;color:#1b5e20;}
+    .al-i{background:#e3f2fd;border-right:4px solid #1976d2;color:#0d47a1;}
+    .al-e{background:#ffebee;border-right:4px solid #f44336;color:#b71c1c;}
+
+    /* TAGS */
+    .tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px;}
+    .tag{font-size:0.71rem;font-weight:600;padding:3px 9px;border-radius:20px;}
+    .tg{background:#e8f5e9;color:#2e7d32;} .tr{background:#ffebee;color:#c62828;}
+    .tb{background:#e3f2fd;color:#1565c0;} .to{background:#fff3e0;color:#e65100;}
+    .tp{background:#f3e5f5;color:#6a1b9a;}
+
+    /* BTNS */
+    .btn-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px;}
+    .btn{display:inline-flex;align-items:center;gap:5px;padding:9px 17px;border-radius:30px;font-size:0.81rem;font-weight:700;border:none;cursor:pointer;font-family:inherit;text-decoration:none;transition:transform .12s;}
+    .btn:active{transform:scale(0.96);}
+    .b-r{background:linear-gradient(135deg,#e63950,#f4a261);color:white;box-shadow:0 3px 10px rgba(230,57,80,.28);}
+    .b-o{background:transparent;border:2px solid var(--red);color:var(--red);}
+    .b-t{background:linear-gradient(135deg,#2ec4b6,#0077b6);color:white;}
+    .b-g{background:#f0ece6;color:var(--text);}
+
+    /* RESTAURANT */
+    .rest{background:var(--card);border-radius:var(--r);margin-bottom:11px;box-shadow:var(--sh);overflow:hidden;cursor:pointer;}
+    .rest-inner{display:flex;}
+    .rest-bar{width:5px;flex-shrink:0;}
+    .rest-body{padding:13px 14px;flex:1;}
+    .rest-body h3{font-size:0.93rem;font-weight:700;margin-bottom:2px;}
+    .rest-body .addr{font-size:0.74rem;color:var(--muted);margin-bottom:3px;}
+    .rest-body .desc{font-size:0.8rem;color:var(--muted);line-height:1.4;}
+    .rest-arrow{padding:13px 12px 13px 8px;color:var(--muted);display:flex;align-items:center;font-size:0.8rem;}
+    .rest-detail{display:none;padding:0 14px 13px;border-top:1px solid #f5f2ee;}
+    .rest-detail.open{display:block;}
+    .rest-detail p{font-size:0.81rem;color:var(--muted);line-height:1.55;margin-top:9px;}
+    .rest-detail .hrs{font-size:0.76rem;color:var(--muted);margin-top:5px;}
+
+    /* ATTRACTION */
+    .attr{background:var(--card);border-radius:var(--r);margin-bottom:11px;box-shadow:var(--sh);overflow:hidden;cursor:pointer;}
+    .attr-head{display:flex;align-items:center;gap:11px;padding:13px 14px;}
+    .attr-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .attr-info h3{font-size:0.91rem;font-weight:700;}
+    .attr-info p{font-size:0.76rem;color:var(--muted);margin-top:2px;}
+    .attr-exp{display:none;padding:0 14px 13px;border-top:1px solid #f5f2ee;font-size:0.8rem;color:var(--muted);line-height:1.55;}
+    .attr-exp.open{display:block;padding-top:9px;}
+
+    /* TRANSPORT ROW */
+    .t-row{display:flex;gap:11px;align-items:center;padding:10px 0;border-bottom:1px solid #f5f2ee;}
+    .t-row:last-child{border-bottom:none;}
+    .t-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .t-txt h4{font-size:0.88rem;font-weight:700;}
+    .t-txt p{font-size:0.77rem;color:var(--muted);}
+    .t-bdg{margin-right:auto;margin-left:0;background:#e3f2fd;color:#1565c0;border-radius:20px;padding:4px 9px;font-size:0.71rem;font-weight:700;flex-shrink:0;}
+
+    /* TIPS */
+    .tip{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f5f2ee;}
+    .tip:last-child{border-bottom:none;}
+    .tip-n{width:25px;height:25px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#e63950,#f4a261);color:white;font-size:0.74rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+    .tip h4{font-size:0.87rem;font-weight:700;margin-bottom:2px;}
+    .tip p{font-size:0.79rem;color:var(--muted);line-height:1.44;}
+
+    /* FOOD */
+    .food-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+    .food-col h4{font-size:0.79rem;font-weight:700;margin-bottom:7px;}
+    .food-col.ok h4{color:#2e7d32;} .food-col.no h4{color:#c62828;}
+    .fi{font-size:0.77rem;color:var(--muted);padding:4px 0;border-bottom:1px dashed #ede9e3;}
+
+    /* WEEK */
+    .week-card{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--r);padding:16px;color:white;margin-bottom:12px;}
+    .week-card h3{font-size:0.93rem;font-weight:700;margin-bottom:9px;opacity:.9;}
+    .wb{background:rgba(255,255,255,.25);border-radius:30px;height:8px;margin-bottom:4px;}
+    .wf{background:white;border-radius:30px;height:8px;width:30%;}
+    .wl{display:flex;justify-content:space-between;font-size:0.68rem;opacity:.75;}
+    .wfacts{display:flex;gap:9px;margin-top:12px;}
+    .wfc{flex:1;background:rgba(255,255,255,.15);border-radius:11px;padding:9px;text-align:center;}
+    .wfc .n{font-size:1.2rem;font-weight:800;}
+    .wfc .l{font-size:0.66rem;opacity:.8;margin-top:2px;}
+
+    /* CITIES MAP */
+    #mapEl{height:280px;border-radius:var(--r);margin-bottom:12px;z-index:1;}
+
+    /* SHOP CARD */
+    .shop-card{background:var(--card);border-radius:var(--r);margin-bottom:11px;box-shadow:var(--sh);overflow:hidden;}
+    .shop-head{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer;}
+    .shop-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .shop-info h3{font-size:0.93rem;font-weight:700;}
+    .shop-info .sh-addr{font-size:0.76rem;color:var(--muted);margin-top:2px;}
+    .shop-info .sh-hrs{font-size:0.72rem;color:#2e7d32;margin-top:2px;font-weight:600;}
+    .shop-expand{display:none;padding:0 14px 13px;border-top:1px solid #f5f2ee;font-size:0.81rem;color:var(--muted);line-height:1.55;}
+    .shop-expand.open{display:block;padding-top:9px;}
+    /* LIVE MAP SEARCH */
+    #shopMapEl{height:260px;border-radius:var(--r);margin-bottom:12px;display:none;}
+    .shop-search-box{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:12px;box-shadow:var(--sh);}
+    .shop-search-box input{width:100%;padding:11px 13px;border:2px solid #e0dcd6;border-radius:12px;font-size:0.9rem;direction:rtl;font-family:inherit;outline:none;margin-bottom:8px;}
+    .shop-search-box input:focus{border-color:var(--red);}
+    .shop-res{background:#f7f4f1;border-radius:12px;padding:10px;margin-top:8px;display:none;font-size:0.82rem;color:var(--muted);}
+    .shop-res.show{display:block;}
+    /* CITY CARD */
+    .city-card{background:var(--card);border-radius:var(--r);margin-bottom:11px;box-shadow:var(--sh);overflow:hidden;cursor:pointer;}
+    .city-head{display:flex;align-items:center;gap:11px;padding:13px 14px;}
+    .city-flag{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+    .city-info h3{font-size:0.95rem;font-weight:700;}
+    .city-info .dist{font-size:0.77rem;color:var(--muted);margin-top:2px;}
+    .city-expand{display:none;padding:0 14px 13px;border-top:1px solid #f5f2ee;}
+    .city-expand.open{display:block;}
+    .city-expand .c-desc{font-size:0.81rem;color:var(--muted);line-height:1.55;margin-top:9px;}
+    .city-expand .c-do{margin-top:10px;}
+    .city-expand .c-do h4{font-size:0.83rem;font-weight:700;margin-bottom:6px;}
+    .do-item{font-size:0.79rem;color:var(--muted);padding:4px 0;border-bottom:1px dashed #ede9e3;display:flex;gap:6px;}
+
+    /* TRIP PLANNER */
+    .planner-form{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--sh);}
+    .planner-form h3{font-size:1rem;font-weight:800;margin-bottom:14px;color:var(--text);}
+    .form-label{font-size:0.79rem;font-weight:700;color:var(--text);margin-bottom:6px;display:block;}
+    .form-select,.form-input{
+      width:100%;padding:11px 13px;border:2px solid #e0dcd6;border-radius:12px;
+      font-size:0.9rem;direction:rtl;font-family:inherit;outline:none;
+      margin-bottom:12px;color:var(--text);background:#f8f5f2;
+    }
+    .form-select:focus,.form-input:focus{border-color:var(--red);background:white;}
+    .plan-result{display:none;}
+    .plan-result.show{display:block;}
+
+    /* Plan summary bar */
+    .plan-summary{
+      background:linear-gradient(135deg,#e63950,#f4a261);
+      color:white;border-radius:var(--r);padding:16px 18px;
+      margin-bottom:16px;
+    }
+    .plan-summary h3{font-size:1rem;font-weight:800;margin-bottom:4px;}
+    .plan-summary p{font-size:0.82rem;opacity:.88;}
+    .plan-summary .ps-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+    .plan-summary .ps-pill{
+      background:rgba(255,255,255,.22);border-radius:20px;
+      padding:4px 12px;font-size:0.75rem;font-weight:700;
+    }
+
+    /* Day card */
+    .plan-day-card{
+      background:var(--card);border-radius:var(--r);
+      margin-bottom:14px;box-shadow:var(--sh);overflow:hidden;
+    }
+    .plan-day-hd{
+      padding:14px 16px 12px;
+      border-bottom:2px solid #f5f2ee;
+      display:flex;align-items:center;gap:10px;
+    }
+    .plan-day-num{
+      width:36px;height:36px;border-radius:50%;
+      background:linear-gradient(135deg,#e63950,#f4a261);
+      color:white;font-size:0.85rem;font-weight:900;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .plan-day-title{font-size:0.97rem;font-weight:800;color:var(--text);}
+    .plan-day-sub{font-size:0.76rem;color:var(--muted);margin-top:1px;}
+
+    /* Timeline item */
+    .plan-tl{padding:0 16px;}
+    .plan-tl-item{
+      display:flex;gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #f5f2ee;
+      align-items:flex-start;
+    }
+    .plan-tl-item:last-child{border-bottom:none;}
+    .plan-tl-left{
+      display:flex;flex-direction:column;align-items:center;
+      gap:4px;flex-shrink:0;width:44px;
+    }
+    .plan-tl-time{
+      font-size:0.72rem;font-weight:700;color:var(--muted);
+      white-space:nowrap;
+    }
+    .plan-tl-dot{
+      width:32px;height:32px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;flex-shrink:0;
+    }
+    .plan-tl-body{flex:1;}
+    .plan-tl-body h5{font-size:0.9rem;font-weight:700;margin-bottom:3px;color:var(--text);}
+    .plan-tl-body .tl-short{font-size:0.8rem;color:var(--muted);margin-bottom:5px;}
+    .plan-tl-body .tl-desc{
+      font-size:0.79rem;color:var(--text);line-height:1.55;
+      background:#f8f5f2;border-radius:10px;padding:9px 11px;
+      margin-top:5px;
+    }
+    .plan-tl-body .tl-tip{
+      font-size:0.76rem;color:#e65100;margin-top:5px;
+      display:flex;gap:5px;align-items:flex-start;
+    }
+    /* Type colors */
+    .dot-food{background:#fff3e0;} .dot-beach{background:#e0f7fa;}
+    .dot-museum{background:#f3e5f5;} .dot-rest{background:#e8f5e9;}
+    .dot-walk{background:#e3f2fd;} .dot-shop{background:#fce4ec;}
+    .dot-transport{background:#ede7f6;} .dot-tip{background:#fff8e1;}
+
+    /* EMERGENCY */
+    .sos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
+    .sos{background:linear-gradient(135deg,#e63950,#c0202f);color:white;border-radius:13px;padding:13px 8px;text-align:center;text-decoration:none;display:block;box-shadow:0 4px 12px rgba(230,57,80,.28);}
+    .sos .sn{font-size:1.35rem;font-weight:900;}
+    .sos .sl{font-size:0.68rem;margin-top:2px;opacity:.85;}
+
+    /* QUICK */
+    .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+    .ql{background:var(--card);border-radius:14px;padding:14px 12px;box-shadow:var(--sh);cursor:pointer;text-align:center;}
+    .ql .qi{font-size:1.6rem;margin-bottom:5px;}
+    .ql .qt{font-size:0.83rem;font-weight:700;}
+    .ql .qs{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+    /* APPS */
+    .apps-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+    .app-c{background:#f7f4f1;border-radius:12px;padding:12px;}
+    .app-c .ai{font-size:1.4rem;margin-bottom:4px;}
+    .app-c .an{font-size:0.85rem;font-weight:700;}
+    .app-c .ad{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+
+    footer{text-align:center;padding:16px;font-size:0.72rem;color:#b5aba0;}
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <span class="pill pill-w">שבוע 12 · T1</span>
+    <span class="pill pill-s">חירום: <a href="tel:112">112</a></span>
+  </div>
+  <h1>המסע שלנו<br>לספרד</h1>
+  <p class="hero-sub">מדריך מלא לזוג בהריון · וילאנובה אי לה גלטרו</p>
+
+  <!-- LOC CARD -->
+  <div class="loc-card">
+    <div class="loc-row">
+      <div class="loc-dot">📍</div>
+      <div class="loc-texts">
+        <div class="lbl">נקודת המוצא שלכם</div>
+        <div class="city" id="locCity">Vilanova i la Geltrú</div>
+        <div class="sub" id="locSub">קטלוניה, ספרד · נקודת מוצא קבועה</div>
+      </div>
+      <button class="gps-btn" onclick="getGPS()">עדכן GPS</button>
+    </div>
+    <div class="loc-status" id="locSt"></div>
+    <button class="mt-btn" onclick="toggleMan()">שנה מיקום ידנית ↓</button>
+    <div class="man-box" id="manBox">
+      <input type="text" id="manAddr" placeholder="הכנס עיר בספרד..."/>
+      <div class="btn-row">
+        <button class="btn b-r" onclick="applyMan()">עדכן</button>
+        <button class="btn b-g" onclick="resetVil()">חזור לוילאנובה</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on"  onclick="go('home',this)">🏠 בית</button>
+  <button class="tab"     onclick="go('rest',this)">🍽️ מסעדות</button>
+  <button class="tab"     onclick="go('attr',this)">🏛️ אטרקציות</button>
+  <button class="tab"     onclick="go('cities',this)">🗺️ ערים</button>
+  <button class="tab"     onclick="go('shops',this)">🛍️ חנויות</button>
+  <button class="tab"     onclick="go('plan',this)">📅 מדריך טיולים</button>
+  <button class="tab"     onclick="go('trans',this)">🚆 תחבורה</button>
+  <button class="tab"     onclick="go('tips',this)">💡 טיפים</button>
+  <button class="tab"     onclick="go('med',this)">🏥 רפואי</button>
+</div>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div class="sec on" id="sec-home">
+  <div class="al al-ok"><div class="ai">✅</div><div><strong>שבוע 12 מושלם לנסיעה!</strong> הבחילות פוחתות, הסיכון יורד. תהנו בספרד!</div></div>
+  <div class="al al-w"><div class="ai">⚠️</div><div><strong>זכרו:</strong> אין סושי, גבינות רכות, חמב"ש, אלכוהול. שתו הרבה מים - ספרד חמה!</div></div>
+  <div class="sec-hd"><h2>מה תרצו?</h2></div>
+  <div class="quick-grid">
+    <div class="ql" onclick="go('rest',document.querySelectorAll('.tab')[1])"><div class="qi">🍽️</div><div class="qt">מסעדות</div><div class="qs">מתאימות להריון</div></div>
+    <div class="ql" onclick="go('attr',document.querySelectorAll('.tab')[2])"><div class="qi">🏖️</div><div class="qt">אטרקציות</div><div class="qs">חופים, מוזיאונים</div></div>
+    <div class="ql" onclick="go('cities',document.querySelectorAll('.tab')[3])"><div class="qi">🗺️</div><div class="qt">ערים מסביב</div><div class="qs">סיטג'ס, ברצלונה...</div></div>
+    <div class="ql" onclick="go('plan',document.querySelectorAll('.tab')[4])"><div class="qi">📅</div><div class="qt">מדריך טיולים</div><div class="qs">תכנן את הנסיעה</div></div>
+  </div>
+  <div class="card" style="margin-top:4px;">
+    <div class="card-hd"><div class="ic" style="background:#e3f2fd;">📱</div><h3>אפליקציות חובה</h3></div>
+    <div class="apps-grid">
+      <div class="app-c"><div class="ai">🗺️</div><div class="an">Google Maps</div><div class="ad">הורידו ספרד אופליין</div></div>
+      <div class="app-c"><div class="ai">🚌</div><div class="an">Moovit</div><div class="ad">תחבורה בזמן אמת</div></div>
+      <div class="app-c"><div class="ai">🍽️</div><div class="an">TheFork</div><div class="ad">הזמנת מסעדות</div></div>
+      <div class="app-c"><div class="ai">🌐</div><div class="an">Translate</div><div class="ad">ספרדית אופליין</div></div>
+    </div>
+  </div>
+  <div class="al al-i"><div class="ai">💬</div><div><strong>ספרדית שימושית:</strong> "Estoy embarazada" = אני בהריון · "Necesito sentarme" = אני צריכה לשבת · "¿Dónde está el baño?" = איפה השירותים?</div></div>
+</div>
+
+<!-- ══════════════ RESTAURANTS ══════════════ -->
+<div class="sec" id="sec-rest">
+  <div class="sec-hd"><h2>מסעדות מומלצות</h2><p>וילאנובה · מתאים להריון שבוע 12</p></div>
+  <div class="al al-w"><div class="ai">🚫</div><div>הימנעו מ: סושי, חמב"ש, גבינות רכות, איולי ביתי, אלכוהול, ביצים חיות</div></div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#2ec4b6,#0077b6);"></div>
+      <div class="rest-body">
+        <h3>1918 Cuina de Mar</h3>
+        <div class="addr">📍 Passeig del Carme · על המזח</div>
+        <div class="desc">מסעדת דגים ים תיכונית עם נוף לנמל</div>
+        <div class="tags"><span class="tag tg">בטוח להריון</span><span class="tag tb">על הים</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> דגים בתנור, אורז עם פירות ים מבושלים, סלטים, פסטה. טרי ומבושל - מושלם להריון.</p>
+      <p><strong>להימנע:</strong> שאלו אם יש מנות עם דגים נאים או גבינות לא מפוסטרות.</p>
+      <div class="hrs">⏰ שני-שבת 13:00-16:00 | 20:00-23:00</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#e63950,#f4a261);"></div>
+      <div class="rest-body">
+        <h3>La Cova del Foc</h3>
+        <div class="addr">📍 Carrer de les Parellades · מרכז העיר</div>
+        <div class="desc">מטבח קטלאני מסורתי עם תנור עצים</div>
+        <div class="tags"><span class="tag tg">קטלאני אותנטי</span><span class="tag to">בשר בתנור</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> עוף בתנור עצים, ירקות גריל, Pa amb tomàquet (לחם עגבנייה ושמן זית קטלאני).</p>
+      <p><strong>טיפ:</strong> בקשו "bien hecho" - מבושל היטב.</p>
+      <div class="hrs">⏰ שלישי-ראשון 13:00-16:00 | 20:30-23:00 · סגור שני</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#4caf50,#8bc34a);"></div>
+      <div class="rest-body">
+        <h3>El Giraldillo</h3>
+        <div class="addr">📍 ליד Rambla Principal</div>
+        <div class="desc">טאפאס קלאסיות - כרוקטות, טורטייה, שרימפס</div>
+        <div class="tags"><span class="tag tg">טאפאס</span><span class="tag tp">מחיר נוח</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> כרוקטות עוף, טורטייה ספרדית, גמבאס (שרימפס) מבושלים, פטאטאס בראבאס.</p>
+      <p><strong>להימנע:</strong> איולי ביתי (ביצה חיה), אנצ'ובי נאים.</p>
+      <div class="hrs">⏰ כל הימים 09:00-24:00</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#ff9800,#f57c00);"></div>
+      <div class="rest-body">
+        <h3>Gula Gula</h3>
+        <div class="addr">📍 מרכז וילאנובה</div>
+        <div class="desc">פיצרייה אהובה - פיצה, פסטות, אווירה משפחתית</div>
+        <div class="tags"><span class="tag to">פיצה</span><span class="tag tg">מתאים</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> פיצות עם גבינה מפוסטרת, פסטות, סלטים.</p>
+      <p><strong>שאלו:</strong> האם הגבינה מפוסטרת (queso pasteurizado).</p>
+      <div class="hrs">⏰ שלישי-ראשון 13:00-15:30 | 20:00-22:30</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e8f5e9;">🥗</div><h3>מה לאכול / להימנע בספרד</h3></div>
+    <div class="food-grid">
+      <div class="food-col ok"><h4>✅ מותר</h4>
+        <div class="fi">דגים מבושלים (גמבאס, בוקרונס)</div>
+        <div class="fi">עוף ובשר מבושל היטב</div>
+        <div class="fi">טורטייה ספרדית</div>
+        <div class="fi">Pa amb tomàquet</div>
+        <div class="fi">פאייה עם פירות ים מבושלים</div>
+        <div class="fi">גבינות קשות (מנצ'גו)</div>
+        <div class="fi">ירקות ופירות (רחוצים)</div>
+        <div class="fi">גלידה מפוסטרת</div>
+      </div>
+      <div class="food-col no"><h4>❌ להימנע</h4>
+        <div class="fi">חמב"ש / כורשו / סלמי</div>
+        <div class="fi">גבינות רכות (queso fresco)</div>
+        <div class="fi">סושי / דגים נאים</div>
+        <div class="fi">איולי ביתי (ביצה חיה)</div>
+        <div class="fi">טונה גדולה (כספית)</div>
+        <div class="fi">פטה וכבד</div>
+        <div class="fi">אלכוהול (סנגריה, יין)</div>
+        <div class="fi">קפה מוגזם (מקסימום 1/יום)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ATTRACTIONS ══════════════ -->
+<div class="sec" id="sec-attr">
+  <div class="sec-hd"><h2>אטרקציות וחופים</h2><p>וילאנובה · מתאים לשבוע 12</p></div>
+  <div class="al al-ok"><div class="ai">🏖️</div><div><strong>שבוע 12:</strong> חופים, מוזיאונים, הליכות קצרות - מצוינים. הימנעו מספורט אתגרי.</div></div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#e0f7fa;">🏖️</div><div class="attr-info"><h3>Platja de Ribes Roges</h3><p>החוף הראשי · 4 ק"מ · דגל כחול</p></div></div>
+    <div class="attr-exp">החוף הארוך ביותר של וילאנובה - 4 ק"מ של חול זהוב. מים רדודים, נגיש לנשים בהריון, שביל רחב לאורך כל החוף. בארי חוף, כיסאות שמש, שירותים.<br><br><strong>טיפ הריון:</strong> SPF 50+, כובע, מים. הגיעו לפני 11:00 לפני החום. שחייה עדינה - מצוינת לגב ולגוף בהריון.<div class="tags" style="margin-top:8px;"><span class="tag tg">מומלץ מאוד</span><span class="tag tb">נגיש</span></div></div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#e8f5e9;">🚶</div><div class="attr-info"><h3>Camino de Ronda</h3><p>שביל חוף · וילאנובה ↔ סיטג'ס</p></div></div>
+    <div class="attr-exp">שביל ציורי לאורך הים. נוף מדהים של צוקים וחופים קטנים. עשו חלק קצר (20-30 דק') עם עצירות - יש ספסלים. לא כל 12 הק"מ!<div class="tags" style="margin-top:8px;"><span class="tag to">הליכה קצרה בלבד</span><span class="tag tb">נוף מרהיב</span></div></div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#f3e5f5;">🚂</div><div class="attr-info"><h3>Museu del Ferrocarril de Catalunya</h3><p>מוזיאון הרכבות · אחד הגדולים באירופה</p></div></div>
+    <div class="attr-exp">50+ קטרי קיטור, רכבות חשמליות ודיזל, תחנה ישנה מרהיבה.<br><strong>למה מושלם להריון:</strong> מזגן, הרבה ישיבה, קצב שלכם.<br><strong>שעות:</strong> שלישי-ראשון 10:00-18:00 · <strong>כניסה:</strong> כ-€8<div class="tags" style="margin-top:8px;"><span class="tag tg">מזגן</span><span class="tag tp">משפחתי</span><span class="tag tb">מומלץ</span></div></div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#e3f2fd;">🏛️</div><div class="attr-info"><h3>Biblioteca Museu Víctor Balaguer</h3><p>מוזיאון קטלוני · נוסד 1884</p></div></div>
+    <div class="attr-exp">אמנות, ארכיאולוגיה ותרבות קטלאנית. בניין מרשים עם חצר.<br><strong>שעות:</strong> שלישי-שישי 10:00-14:00 | 16:00-19:00 · שבת-ראשון 10:00-14:00<br><strong>כניסה:</strong> חינם בסופ"ש!</div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#fff3e0;">⛵</div><div class="attr-info"><h3>Espai Far - מוזיאון ימי</h3><p>מגדלור ישן + היסטוריה ימית</p></div></div>
+    <div class="attr-exp">מוזיאון במגדלור - תצוגות על דייגי וילאנובה, סירות עתיקות, נוף מהמגדלור.<br><strong>שעות:</strong> שישי-ראשון 11:00-14:00 | 16:00-18:00<br><strong>טיפ:</strong> אם עייפות, נשארו בקומת הקרקע - גם היא מרתקת.</div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#fce4ec;">🏰</div><div class="attr-info"><h3>Castellet Castle</h3><p>מהמאה ה-10 · 20 דקות מוילאנובה</p></div></div>
+    <div class="attr-exp">טירה מרשימה על גבעה עם נוף פנורמי. מגיעים ברכב, הליכה מהחניה לטירה כ-10 דקות קלות. שווה את הנוף!<div class="tags" style="margin-top:8px;"><span class="tag tb">ברכב</span><span class="tag tg">נוף מדהים</span></div></div>
+  </div>
+
+  <div class="attr" onclick="toggleA(this)">
+    <div class="attr-head"><div class="attr-icon" style="background:#e8f5e9;">🛍️</div><div class="attr-info"><h3>Rambla Principal + Plaça de la Vila</h3><p>הכיכר הראשית · קניות · בתי קפה</p></div></div>
+    <div class="attr-exp">שדרה עם ספסלים לאורכה - מושלם לפוש! חנויות מקומיות, בתי קפה, אווירה קטלאנית אותנטית.<br><br><strong>קניות מומלצות:</strong> Mercadona (סופרמרקט), Farmacia (ויטמינים + קרם הריון), H&M / Primark (בגדי הריון).</div>
+  </div>
+
+  <div class="card" style="border:2px solid #ffcdd2;">
+    <div class="card-hd"><div class="ic" style="background:#ffebee;">🚫</div><h3>להימנע - לא מתאים לשבוע 12</h3></div>
+    <div class="food-grid" style="margin-top:4px;">
+      <div class="fi">ספורט אתגרי / גלישה</div><div class="fi">ג'קוזי / ספא חם</div>
+      <div class="fi">רכבת הרים</div><div class="fi">צלילה</div>
+      <div class="fi">הליכה מעל 4 ק"מ</div><div class="fi">שמש ממושכת 12-16</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ CITIES ══════════════ -->
+<div class="sec" id="sec-cities">
+  <div class="sec-hd"><h2>ערים מסביב</h2><p>יום טיול מוילאנובה אי לה גלטרו</p></div>
+
+  <!-- MAP -->
+  <div id="mapEl"></div>
+
+  <div class="city-card" onclick="toggleCity(this)">
+    <div class="city-head">
+      <div class="city-flag" style="background:linear-gradient(135deg,#e0f7fa,#b2ebf2);">🏖️</div>
+      <div class="city-info">
+        <h3>סיטג'ס (Sitges)</h3>
+        <div class="dist">📍 10 ק"מ מוילאנובה · 10 דק' ברכבת</div>
+      </div>
+    </div>
+    <div class="city-expand">
+      <div class="c-desc">עיירת חוף יפהפייה ועשירה עם 17 חופים מדהימים, טיילת ימית מרהיבה וארכיטקטורה של מנשנים מסוף המאה ה-19. יותר תיירותית מוילאנובה.</div>
+      <div class="c-do">
+        <h4>מה לעשות (מתאים לשבוע 12):</h4>
+        <div class="do-item">🚶 <span><strong>Passeig Marítim</strong> - טיילת הים הנהדרת לאורך החוף</span></div>
+        <div class="do-item">🏖️ <span><strong>Platja de Sant Sebastià</strong> - חוף ראשי שקט ויפה</span></div>
+        <div class="do-item">🏛️ <span><strong>Museu Cau Ferrat</strong> - מוזיאון אמנות ייחודי</span></div>
+        <div class="do-item">🍦 <span><strong>גלידריות ברחובות הצרים</strong> - חוויה קטלאנית</span></div>
+        <div class="do-item">🚆 <span><strong>נסיעה:</strong> רכבת R2S מוילאנובה, 10 דקות, ~€3</span></div>
+      </div>
+      <div class="tags" style="margin-top:10px;"><span class="tag tg">מומלץ מאוד</span><span class="tag tb">10 דק' ברכבת</span><span class="tag to">תיירותי</span></div>
+    </div>
+  </div>
+
+  <div class="city-card" onclick="toggleCity(this)">
+    <div class="city-head">
+      <div class="city-flag" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">🏙️</div>
+      <div class="city-info">
+        <h3>ברצלונה (Barcelona)</h3>
+        <div class="dist">📍 45 ק"מ מוילאנובה · 45 דק' ברכבת</div>
+      </div>
+    </div>
+    <div class="city-expand">
+      <div class="c-desc">בירת קטלוניה, אחת הערים היפות בעולם. ארכיטקטורה של גאודי, חופים עירוניים, מסעדות מעולות. מקסום לבייבימון!</div>
+      <div class="c-do">
+        <h4>מה לעשות (מתאים לשבוע 12):</h4>
+        <div class="do-item">⛪ <span><strong>La Sagrada Família</strong> - הכנסייה של גאודי (מחיר: ~€35, קנו מראש!)</span></div>
+        <div class="do-item">🌳 <span><strong>Park Güell</strong> - פארק גאודי עם נוף לעיר</span></div>
+        <div class="do-item">🏖️ <span><strong>Barceloneta</strong> - חוף העיר, נגיש ונוח</span></div>
+        <div class="do-item">🛍️ <span><strong>Las Ramblas + Mercat de la Boqueria</strong> - שוק מזון מפורסם</span></div>
+        <div class="do-item">🏛️ <span><strong>Barri Gòtic</strong> - שכונה גותית עם מסעדות מעולות</span></div>
+        <div class="do-item">🚆 <span><strong>נסיעה:</strong> רכבת R2/R2S מוילאנובה, 45 דק', ~€7</span></div>
+      </div>
+      <div class="tags" style="margin-top:10px;"><span class="tag tp">בייבימון</span><span class="tag tb">45 דק' ברכבת</span><span class="tag tr">עמוס - תנוחו!</span></div>
+    </div>
+  </div>
+
+  <div class="city-card" onclick="toggleCity(this)">
+    <div class="city-head">
+      <div class="city-flag" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">🏛️</div>
+      <div class="city-info">
+        <h3>טרגונה (Tarragona)</h3>
+        <div class="dist">📍 45 ק"מ מוילאנובה · 40 דק' ברכבת</div>
+      </div>
+    </div>
+    <div class="city-expand">
+      <div class="c-desc">עיר עתיקה ומרתקת עם האמפיתיאטרון הרומי הנפלא ביותר בספרד. שקטה יותר מברצלונה ומושלמת לטיול יום רגוע.</div>
+      <div class="c-do">
+        <h4>מה לעשות (מתאים לשבוע 12):</h4>
+        <div class="do-item">🏟️ <span><strong>Amfiteatre Romà</strong> - אמפיתיאטרון רומי ממש על הים! חינמי לצפייה מבחוץ</span></div>
+        <div class="do-item">🏰 <span><strong>חומות רומיות</strong> - טיול קצר עם נוף לים</span></div>
+        <div class="do-item">🌊 <span><strong>Platja del Miracle</strong> - חוף ממש מתחת לאמפיתיאטרון</span></div>
+        <div class="do-item">🍽️ <span><strong>El Serrallo</strong> - שכונת דייגים עם מסעדות דגים טריים מבושלים</span></div>
+        <div class="do-item">🚆 <span><strong>נסיעה:</strong> רכבת מוילאנובה, ~40 דק', ~€6</span></div>
+      </div>
+      <div class="tags" style="margin-top:10px;"><span class="tag to">היסטוריה</span><span class="tag tg">שקט ורגוע</span><span class="tag tb">40 דק' ברכבת</span></div>
+    </div>
+  </div>
+
+  <div class="city-card" onclick="toggleCity(this)">
+    <div class="city-head">
+      <div class="city-flag" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">🍷</div>
+      <div class="city-info">
+        <h3>פנדס (Penedès) - אזור יין</h3>
+        <div class="dist">📍 15-25 ק"מ מוילאנובה · אזור כפרי</div>
+      </div>
+    </div>
+    <div class="city-expand">
+      <div class="c-desc">אזור הכרמים המפורסם של קטלוניה - מולדת הקאווה (יין מבעבע). כפרים יפים, נוף מרהיב, חוות גסטרונומיות.</div>
+      <div class="c-do">
+        <h4>מה לעשות (גם בהריון!):</h4>
+        <div class="do-item">🍇 <span><strong>Freixenet Winery</strong> - סיור בייקב עם מיץ ענבים (לא יין!) ורכבת תת-קרקעית</span></div>
+        <div class="do-item">🌄 <span><strong>Vila Franca del Penedès</strong> - עיר שוק קטנה ויפה</span></div>
+        <div class="do-item">🏡 <span><strong>Masias כפריות</strong> - ארוחות צהריים בחוות כפריות עם נוף לכרמים</span></div>
+      </div>
+      <div class="tags" style="margin-top:10px;"><span class="tag tg">מיץ ענבים לא יין!</span><span class="tag tb">ברכב</span></div>
+    </div>
+  </div>
+
+  <div class="city-card" onclick="toggleCity(this)">
+    <div class="city-head">
+      <div class="city-flag" style="background:linear-gradient(135deg,#e3f2fd,#bbdefb);">⛵</div>
+      <div class="city-info">
+        <h3>פורט ד'אינפרן (Port d'Aínfer) ואזור גאראף</h3>
+        <div class="dist">📍 15-20 ק"מ מוילאנובה</div>
+      </div>
+    </div>
+    <div class="city-expand">
+      <div class="c-desc">חופים קטנים ושקטים לאורך הנסיעה בין וילאנובה לסיטג'ס. חופים מוסתרים בין צוקים - הרבה פחות עמוסים מהחופים הגדולים.</div>
+      <div class="c-do">
+        <h4>מה לעשות:</h4>
+        <div class="do-item">🏖️ <span>חופים שקטים ללא המון תיירים</span></div>
+        <div class="do-item">🌊 <span>מים צלולים וכחולים</span></div>
+        <div class="do-item">🚗 <span>מגיעים ברכב - אין תחבורה ציבורית ישירה</span></div>
+      </div>
+      <div class="tags" style="margin-top:10px;"><span class="tag tg">שקט ורגוע</span><span class="tag tr">רכב בלבד</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SHOPS ══════════════ -->
+<div class="sec" id="sec-shops">
+  <div class="sec-hd"><h2>חנויות בוילאנובה</h2><p>כל מה שצריך לזוג בהריון</p></div>
+
+  <!-- LIVE SEARCH -->
+  <div class="shop-search-box">
+    <h3 style="font-size:0.93rem;font-weight:700;margin-bottom:10px;">חפשו חנות על המפה</h3>
+    <input type="text" id="shopSearchInput" placeholder="כתבו שם חנות... למשל: Zara, farmacia, Carrefour"/>
+    <button class="btn b-r" style="width:100%;" onclick="searchShopOnMap()">חפש על המפה</button>
+    <div class="shop-res" id="shopRes"></div>
+  </div>
+  <div id="shopMapEl"></div>
+
+  <!-- SUPERMARKETS -->
+  <p style="font-size:0.78rem;font-weight:700;color:var(--muted);margin-bottom:8px;padding-right:2px;">🛒 סופרמרקטים</p>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#e8f5e9;">🛒</div>
+      <div class="shop-info">
+        <h3>Mercadona</h3>
+        <div class="sh-addr">📍 Carrer Miquel Guansé, 3 · Ronda Ibèrica, 155 · Carrer de la Piera, 7</div>
+        <div class="sh-hrs">⏰ 09:15 - 21:15 · כל הימים</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      הסופרמרקט הכי פופולרי בספרד. שלושה סניפים בוילאנובה. יש הכל: אוכל טרי, ויטמינים, קרמים, מוצרי תינוק, אוכל מוכן לחמם.<br><br>
+      <strong>לזוג בהריון:</strong> חפשו "ácido fólico" (חומצה פולית), "omega 3" לנשים בהריון, קרם נגד סימני מתיחה, מים מינרלים בכמות גדולה.
+      <div class="tags" style="margin-top:8px;"><span class="tag tg">3 סניפים</span><span class="tag tb">הכי גדול</span></div>
+    </div>
+  </div>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#e3f2fd;">🛒</div>
+      <div class="shop-info">
+        <h3>Sabeco / Caprabo</h3>
+        <div class="sh-addr">📍 מרכז וילאנובה</div>
+        <div class="sh-hrs">⏰ 09:00 - 21:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">רשתות סופרמרקט קטלאניות נוספות - קרובות למרכז העיר. מוצרים מקומיים, ירקות טריים, גבינות.</div>
+  </div>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#fff3e0;">🥦</div>
+      <div class="shop-info">
+        <h3>Mercat Public del Centre</h3>
+        <div class="sh-addr">📍 שוק המזון המרכזי של וילאנובה</div>
+        <div class="sh-hrs">⏰ שני-שבת 08:00 - 14:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      השוק המסורתי של וילאנובה - ירקות, פירות, דגים, בשר, גבינות מקומיות. קטלאני אמיתי!<br><br>
+      <strong>לזוג בהריון:</strong> ירקות וירקות - הכי טריים. קנו רק מה שתבשלו - אל תקנו דגים נאים לאכילה ישירה.
+      <div class="tags" style="margin-top:8px;"><span class="tag to">בוקר בלבד</span><span class="tag tg">טרי ומקומי</span></div>
+    </div>
+  </div>
+
+  <!-- PHARMACIES -->
+  <p style="font-size:0.78rem;font-weight:700;color:var(--muted);margin:14px 0 8px;padding-right:2px;">💊 בתי מרקחת</p>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#fce4ec;">💊</div>
+      <div class="shop-info">
+        <h3>Farmacia Granda Palmero</h3>
+        <div class="sh-addr">📍 וילאנובה אי לה גלטרו</div>
+        <div class="sh-hrs">⏰ שני-שישי 09:00 - 21:00 · שבת 09:00 - 14:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      בית מרקחת עם שירות אישי. יש כל מה שצריך להריון.<br><br>
+      <strong>מה לקנות:</strong><br>
+      - Ácido fólico (חומצה פולית)<br>
+      - Omega 3 para embarazadas<br>
+      - Crema antiestrías (קרם נגד סימני מתיחה)<br>
+      - Hierro (ברזל) לפי המלצת הרופא<br>
+      - Protector solar SPF 50+<br>
+      - Paracetamol (הכאב היחיד המותר בהריון)<br><br>
+      <strong>לא לקנות בלי רופא:</strong> איבופרופן, אספירין, כל אנטיביוטיקה.
+      <div class="tags" style="margin-top:8px;"><span class="tag tp">הריון</span><span class="tag tg">שירות אישי</span></div>
+    </div>
+  </div>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#e8f5e9;">🟢</div>
+      <div class="shop-info">
+        <h3>Farmacia de Guardia - 24/7</h3>
+        <div class="sh-addr">📍 מתחלפות בין בתי המרקחת בעיר</div>
+        <div class="sh-hrs">⏰ 24 שעות · בחרו מי בתור לילה</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      תמיד יש בית מרקחת פתוח בוילאנובה - גם בלילה ובסופ"ש. חפשו את השלט הירוק המהבהב בחלון. אפשר גם לשאול בבית המלון מי בתור.
+    </div>
+  </div>
+
+  <!-- BABY & PREGNANCY -->
+  <p style="font-size:0.78rem;font-weight:700;color:var(--muted);margin:14px 0 8px;padding-right:2px;">👶 תינוקות והריון</p>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#f3e5f5;">👶</div>
+      <div class="shop-info">
+        <h3>Okaidi-Obaïbi</h3>
+        <div class="sh-addr">📍 Rambla Principal, 65 · וילאנובה</div>
+        <div class="sh-hrs">⏰ שני-שבת 10:00 - 20:30</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      רשת בגדים צרפתית לתינוקות וילדים מלידה עד גיל 14. בגדים איכותיים, נוחים ויפים. מומלץ לקנות כמה בגדים לתינוק כבר עכשיו - זו חוויה מרגשת!
+      <div class="tags" style="margin-top:8px;"><span class="tag tp">0-14 שנים</span><span class="tag tb">Rambla Principal</span></div>
+    </div>
+  </div>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#e8f5e9;">🌿</div>
+      <div class="shop-info">
+        <h3>Som Llavors</h3>
+        <div class="sh-addr">📍 וילאנובה אי לה גלטרו</div>
+        <div class="sh-hrs">⏰ שני-שישי 10:00 - 20:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      חנות מיוחדת למוצרי הורות טבעית ומודעת. מוצרים לנשים בהריון, הנקה, ונשיאת תינוקות ארגונומית.<br><br>
+      <strong>יש כאן:</strong> בגדי הריון אורגניים, שמנים טבעיים לעיסוי, מכשירי הנקה, נשיאה ארגונומית, צעצועים טבעיים.
+      <div class="tags" style="margin-top:8px;"><span class="tag tg">אורגני</span><span class="tag tp">הריון + הנקה</span></div>
+    </div>
+  </div>
+
+  <!-- CLOTHING -->
+  <p style="font-size:0.78rem;font-weight:700;color:var(--muted);margin:14px 0 8px;padding-right:2px;">👗 בגדים</p>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#fce4ec;">👗</div>
+      <div class="shop-info">
+        <h3>Zara</h3>
+        <div class="sh-addr">📍 Rambla Principal, וילאנובה</div>
+        <div class="sh-hrs">⏰ שני-שבת 10:00 - 21:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      רשת הבגדים הספרדית הגדולה. יש בגדי הריון נוחים ועדכניים. מחיר בינוני-גבוה אך איכות טובה.
+      <div class="tags" style="margin-top:8px;"><span class="tag to">הריון</span><span class="tag tb">Rambla</span></div>
+    </div>
+  </div>
+
+  <div class="shop-card">
+    <div class="shop-head" onclick="toggleShop(this)">
+      <div class="shop-icon" style="background:#e3f2fd;">👙</div>
+      <div class="shop-info">
+        <h3>Tezenis</h3>
+        <div class="sh-addr">📍 Rambla Principal, 57 · וילאנובה</div>
+        <div class="sh-hrs">⏰ שני-שבת 10:00 - 21:00</div>
+      </div>
+    </div>
+    <div class="shop-expand">
+      חנות לתחתונים, פיג'מות ובגדי ים - מחיר זול ואיכות סבירה. מצוין לקנות הלבשה תחתונה נוחה להריון ובגדי ים שמותאמים לשחייה.
+      <div class="tags" style="margin-top:8px;"><span class="tag tg">זול</span><span class="tag tp">הריון</span><span class="tag tb">Rambla 57</span></div>
+    </div>
+  </div>
+
+  <div class="al al-i" style="margin-top:4px;"><div class="ai">💡</div><div><strong>טיפ:</strong> לא מצאתם? כתבו שם החנות בחיפוש למעלה - יציג לכם על המפה!</div></div>
+</div>
+
+<!-- ══════════════ TRIP PLANNER ══════════════ -->
+<div class="sec" id="sec-plan">
+  <div class="sec-hd"><h2>מדריך טיולים אישי</h2><p>בנו את הטיול המושלם לשבוע 12</p></div>
+
+  <div class="planner-form">
+    <label class="form-label">כמה ימים אתם בספרד?</label>
+    <select class="form-select" id="planDays">
+      <option value="1">יום אחד</option>
+      <option value="2">יומיים</option>
+      <option value="3" selected>3 ימים</option>
+      <option value="4">4 ימים</option>
+      <option value="5">5 ימים</option>
+      <option value="7">שבוע</option>
+    </select>
+
+    <label class="form-label">מאיפה יוצאים?</label>
+    <select class="form-select" id="planBase">
+      <option value="vilanova" selected>וילאנובה אי לה גלטרו</option>
+      <option value="sitges">סיטג'ס</option>
+      <option value="barcelona">ברצלונה</option>
+      <option value="tarragona">טרגונה</option>
+    </select>
+
+    <label class="form-label">מה מעניין אתכם יותר?</label>
+    <select class="form-select" id="planStyle">
+      <option value="relax">מנוחה ושחייה בחוף</option>
+      <option value="culture">תרבות ומוזיאונים</option>
+      <option value="food">אוכל ומסעדות</option>
+      <option value="mix" selected>שילוב של הכל</option>
+      <option value="cities">טיולי יום לערים</option>
+    </select>
+
+    <button class="btn b-r" style="width:100%;" onclick="buildPlan()">צור מדריך טיולים</button>
+  </div>
+
+  <div class="plan-result" id="planResult"></div>
+</div>
+
+<!-- ══════════════ TRANSPORT ══════════════ -->
+<div class="sec" id="sec-trans">
+  <div class="sec-hd"><h2>תחבורה מוילאנובה</h2><p>לברצלונה, סיטג'ס וכל ספרד</p></div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fce4ec;">🚆</div><h3>רכבות - Rodalies / Renfe</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#fce4ec;">🚆</div><div class="t-txt"><h4>וילאנובה ← ברצלונה Sants</h4><p>קו R2S / R2 / R15 · כל 20 דקות</p></div><div class="t-bdg">~45 דק' · €7</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#f3e5f5;">🚉</div><div class="t-txt"><h4>וילאנובה ← סיטג'ס</h4><p>רכבת אזורית</p></div><div class="t-bdg">~10 דק' · €3</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#fff3e0;">🚅</div><div class="t-txt"><h4>וילאנובה ← טרגונה</h4><p>רכבת מהירה</p></div><div class="t-bdg">~40 דק' · €6</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e3f2fd;">🕐</div><div class="t-txt"><h4>שעות פעילות</h4><p>ראשונה: 04:45 · אחרונה: 00:50</p></div></div>
+    <div class="al al-i" style="margin-top:11px;margin-bottom:0;"><div class="ai">💺</div><div>בקשו מושב עדיפות לנשים בהריון - קיים בכל הרכבות!</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e3f2fd;">🚌</div><h3>אוטובוסים</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#e3f2fd;">🚌</div><div class="t-txt"><h4>Bus Garraf - וילאנובה ← ברצלונה</h4><p>כל 15 דקות</p></div><div class="t-bdg">~67 דק' · €8</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🏙️</div><div class="t-txt"><h4>אוטובוסים עירוניים</h4><p>קווים L2, L25 - כסו את כל וילאנובה</p></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fff3e0;">🚕</div><h3>מונית / Ride</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#fff8e1;">🚖</div><div class="t-txt"><h4>Cabify</h4><p>הכי פופולרי בקטלוניה</p></div></div>
+    <div class="t-row"><div class="t-ic" style="background:#fce4ec;">🚗</div><div class="t-txt"><h4>Uber</h4><p>עובד בברצלונה ובערים גדולות</p></div></div>
+    <div class="al al-ok" style="margin-top:10px;margin-bottom:0;"><div class="ai">✅</div><div>כשאין כוח ללכת - מונית זה ההשקעה הכי טובה בהריון!</div></div>
+  </div>
+</div>
+
+<!-- ══════════════ TIPS ══════════════ -->
+<div class="sec" id="sec-tips">
+  <div class="sec-hd"><h2>טיפים לנסיעה</h2><p>שבוע 12 בספרד</p></div>
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fce4ec;">✈️</div><h3>לפני הנסיעה</h3></div>
+    <div class="tip"><div class="tip-n">1</div><div><h4>אישור רופא בכתב</h4><p>שבוע 12 בדרך כלל בטוח לטוס. קבלו אישור. בקשו מושב ליד המעבר.</p></div></div>
+    <div class="tip"><div class="tip-n">2</div><div><h4>ביטוח נסיעות - חובה</h4><p>ודאו שהביטוח מכסה הריון! יש חברות שלא מכסות מעל שבוע 12.</p></div></div>
+    <div class="tip"><div class="tip-n">3</div><div><h4>מסמכים ל-Google Drive</h4><p>תיק הריון, דרכון, ביטוח, מרשמים - כולם מצולמים ונגישים מכל מקום.</p></div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fff3e0;">☀️</div><h3>כל יום בספרד</h3></div>
+    <div class="tip"><div class="tip-n">4</div><div><h4>מים - לפחות 2 ליטר ביום</h4><p>ספרד חמה. בקבוק מים תמיד בתיק. מים מבקבוק, לא מהברז.</p></div></div>
+    <div class="tip"><div class="tip-n">5</div><div><h4>אמצו את הסיאסטה!</h4><p>13:00-16:00 - מנוחה עם מיזוג. מושלם להריון.</p></div></div>
+    <div class="tip"><div class="tip-n">6</div><div><h4>תזמון ספרדי</h4><p>צהריים 14:30, ערב 21:00+. אכלו חטיפים בין לבין.</p></div></div>
+    <div class="tip"><div class="tip-n">7</div><div><h4>SPF 50+ חובה</h4><p>הריון מגביר רגישות לשמש. קרם, כובע, משקפי שמש.</p></div></div>
+    <div class="tip"><div class="tip-n">8</div><div><h4>נעליים נוחות</h4><p>כפות הרגליים מתנפחות בהריון + חום. נעלי ספורט רחבות.</p></div></div>
+  </div>
+  <div class="al al-i"><div class="ai">🗣️</div><div><strong>ספרדית שימושית:</strong><br>"Estoy embarazada" = אני בהריון · "Necesito sentarme" = אני צריכה לשבת · "Sin alcohol" = בלי אלכוהול · "¿Dónde está el baño?" = איפה השירותים?</div></div>
+</div>
+
+<!-- ══════════════ MEDICAL ══════════════ -->
+<div class="sec" id="sec-med">
+  <div class="sec-hd"><h2>מידע רפואי</h2><p>חירום, בתי חולים, ביטוח</p></div>
+  <div class="card" style="border:2px solid #ef9a9a;">
+    <div class="card-hd" style="color:#c62828;"><div class="ic" style="background:#ffebee;">🚨</div><h3>מספרי חירום ספרד</h3></div>
+    <div class="sos-grid">
+      <a href="tel:112" class="sos"><div class="sn">112</div><div class="sl">חירום כללי</div></a>
+      <a href="tel:061" class="sos"><div class="sn">061</div><div class="sl">אמבולנס</div></a>
+      <a href="tel:091" class="sos"><div class="sn">091</div><div class="sl">משטרה</div></a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fce4ec;">🏥</div><h3>בתי חולים</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#fce4ec;">🏥</div><div class="t-txt"><h4>Hospital de Sant Antoni Abat</h4><p>Carrer de Sant Antoni, Vilanova i la Geltrú · הקרוב ביותר</p></div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e3f2fd;">🏨</div><div class="t-txt"><h4>Hospital de Bellvitge - ברצלונה</h4><p>בית חולים גדול · 40 דק' מוילאנובה</p></div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">💊</div><div class="t-txt"><h4>Farmacia de Guardia</h4><p>בית מרקחת 24/7 בכל עיר - חפשו הצלב הירוק</p></div></div>
+  </div>
+  <div class="card" style="border:2px solid #fff9c4;">
+    <div class="card-hd"><div class="ic" style="background:#fff9c4;">⚠️</div><h3>מתי לפנות לחירום?</h3></div>
+    <div class="al al-e" style="margin-bottom:0;"><div class="ai">🆘</div><div><strong>פנו מיד ל-112 אם:</strong><br>• כאבי בטן חזקים · דימום · חום מעל 38.5°<br>• כאב ראש קיצוני · נפיחות פנים/ידיים<br>• כאבים בחזה · עילפון · קושי בנשימה</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e8f5e9;">🔐</div><h3>ביטוח</h3></div>
+    <div class="tip"><div class="tip-n">1</div><div><h4>מספר חירום ביטוח</h4><p>שמרו בטלפון - לא רק בארנק!</p></div></div>
+    <div class="tip"><div class="tip-n">2</div><div><h4>קופת חולים ישראלית</h4><p>מכבי, לאומית, כללית - יש כיסוי חלקי בחו"ל. בדקו מה מכוסה.</p></div></div>
+  </div>
+</div>
+
+<footer>מדריך ספרד להריון · וילאנובה אי לה גלטרו · נסיעה נעימה!<br>המידע כללי בלבד - התייעצו עם הרופא שלכם</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const SEARCH_DATA = [
+  // RESTAURANTS
+  {t:'1918 Cuina de Mar',d:'מסעדת דגים על הנמל - פירות ים מבושלים, אורז, פסטה',cat:'מסעדה',tab:'rest'},
+  {t:'La Cova del Foc',d:'מטבח קטלאני מסורתי עם תנור עצים',cat:'מסעדה',tab:'rest'},
+  {t:'El Giraldillo',d:'טאפאס קלאסיות - כרוקטות, טורטייה, שרימפס',cat:'מסעדה',tab:'rest'},
+  {t:'Gula Gula',d:'פיצרייה אהובה - פיצה, פסטות',cat:'מסעדה',tab:'rest'},
+  // ATTRACTIONS
+  {t:'Platja de Ribes Roges',d:'חוף ראשי - 4 ק"מ, דגל כחול, שחייה עדינה',cat:'חוף',tab:'attr'},
+  {t:'Camino de Ronda',d:'שביל חוף ציורי בין וילאנובה לסיטגס',cat:'שביל',tab:'attr'},
+  {t:'Museu del Ferrocarril',d:'מוזיאון הרכבות - אחד הגדולים באירופה',cat:'מוזיאון',tab:'attr'},
+  {t:'Museu Víctor Balaguer',d:'מוזיאון קטלוני קלאסי - חינם בסופ"ש',cat:'מוזיאון',tab:'attr'},
+  {t:'Espai Far',d:'מוזיאון ימי במגדלור ישן',cat:'מוזיאון',tab:'attr'},
+  {t:'Castellet Castle',d:'טירה מהמאה ה-10, נוף פנורמי',cat:'היסטוריה',tab:'attr'},
+  {t:'Rambla Principal',d:'שדרה ראשית עם קפה, קניות, ספסלים',cat:'עיר',tab:'attr'},
+  // CITIES
+  {t:'סיטג\'ס',d:'Sitges · 10 ק"מ · 10 דק\' ברכבת R2S · 17 חופים יפים · עיירת חוף קסומה · כנסייה על הסלע',cat:'עיר',tab:'cities'},
+  {t:'ברצלונה',d:'Barcelona · 45 ק"מ · 45 דק\' ברכבת · גאודי · סגרדה פמיליה · פארק גואל · חוף ברצלונטה · שכונה גותית',cat:'עיר',tab:'cities'},
+  {t:'טרגונה',d:'Tarragona · 45 ק"מ · 40 דק\' ברכבת · אמפיתיאטרון רומי · חומות עתיקות · UNESCO',cat:'עיר',tab:'cities'},
+  {t:'פנדס',d:'Penedès · Vilafranca · 15-25 ק"מ · אזור יין קטלאני · כרמים · Freixenet · קאווה',cat:'אזור',tab:'cities'},
+  {t:'וילאנובה',d:'Vilanova i la Geltrú · נקודת מוצא · חוף Ribes Roges · מוזיאון רכבות · Rambla',cat:'עיר',tab:'home'},
+  // TRANSPORT
+  {t:'רכבת לברצלונה',d:'R2S - כל 20 דקות, 45 דקות, ~€7',cat:'תחבורה',tab:'trans'},
+  {t:'רכבת לסיטג\'ס',d:'10 דקות, ~€3',cat:'תחבורה',tab:'trans'},
+  {t:'Cabify / Uber',d:'מונית - מומלץ להריון',cat:'תחבורה',tab:'trans'},
+  // TIPS
+  {t:'מים 2 ליטר ביום',d:'ספרד חמה - חשוב להריון',cat:'טיפ',tab:'tips'},
+  {t:'SPF 50+ קרם הגנה',d:'הריון מגביר רגישות לשמש',cat:'טיפ',tab:'tips'},
+  {t:'סיאסטה 13:00-16:00',d:'מנוחת צהריים ספרדית - מושלם להריון',cat:'טיפ',tab:'tips'},
+  {t:'מוזיאון הרכבות - מזגן',d:'מושלם להריון - קר, ישיבה, קצב שלכם',cat:'טיפ',tab:'attr'},
+  // MEDICAL
+  {t:'חירום 112',d:'מספר חירום כללי בספרד',cat:'רפואי',tab:'med'},
+  {t:'אמבולנס 061',d:'אמבולנס ספרד',cat:'רפואי',tab:'med'},
+  {t:'Hospital Sant Antoni Abat',d:'בית חולים בוילאנובה',cat:'רפואי',tab:'med'},
+  // SHOPS
+  {t:'Mercadona',d:'סופרמרקט - Carrer Miquel Guansé 3 - פתוח 09:15-21:15',cat:'חנות',tab:'shops'},
+  {t:'Farmacia Granda',d:'בית מרקחת בוילאנובה - ויטמינים קרם הריון',cat:'בית מרקחת',tab:'shops'},
+  {t:'Farmacia',d:'בית מרקחת - יש גם Farmacia de Guardia 24 שעות',cat:'בית מרקחת',tab:'shops'},
+  {t:'Okaidi',d:'בגדי תינוקות Rambla Principal 65 - פתוח 10:00-20:30',cat:'חנות תינוקות',tab:'shops'},
+  {t:'Som Llavors',d:'מוצרי הריון טבעיים - הנקה ונשיאה ארגונומית',cat:'חנות הריון',tab:'shops'},
+  {t:'Zara',d:'בגדי הריון ברמבלה הראשית - פתוח 10:00-21:00',cat:'בגדים',tab:'shops'},
+  {t:'Tezenis',d:'תחתונים ובגדי ים Rambla Principal 57 - זול ונוח',cat:'בגדים',tab:'shops'},
+  {t:'Mercat',d:'שוק מזון מסורתי - ירקות, דגים, גבינות - פתוח 08:00-14:00',cat:'שוק',tab:'shops'},
+  {t:'סופרמרקט',d:'Mercadona, Sabeco, Caprabo - כל מה שצריך',cat:'חנות',tab:'shops'},
+  {t:'בית מרקחת',d:'Farmacia - חפשו צלב ירוק בחלון',cat:'בית מרקחת',tab:'shops'},
+  {t:'קרם הריון',d:'Farmacia - crema antiestrías, SPF 50+',cat:'הריון',tab:'shops'},
+];
+
+// ── ACTIVITY LIBRARY ───────────────────────────────────────
+const ACT = {
+  breakfast: {t:'09:00',a:'ארוחת בוקר קטלאנית',e:'🥐',type:'food',
+    short:'Pa amb tomàquet + מיץ תפוזים טבעי',
+    desc:'הבוקר הקטלאני המסורתי: לחם פריך עם עגבנייה טחונה ושמן זית כתית מעולה. מגישים עם מיץ תפוזים סחוט טרי (zumo natural). מושלם להריון - קל לעיכול, מזין ומרגיע בחילות בוקר.',
+    tip:'בקשו "sin sal" (בלי מלח) אם יש לחץ דם גבוה. לא לשכוח ביסקוויט יבש לפני הקימה מהמיטה!'},
+  beach_morning: {t:'10:00',a:'Platja de Ribes Roges',e:'🏖️',type:'beach',
+    short:'החוף הראשי של וילאנובה - 4 ק"מ חול זהוב',
+    desc:'החוף הגדול והיפה של וילאנובה - 4 קילומטר של חול זהוב רחב. המים רדודים ושקטים, מושלמים לשחייה עדינה. שחייה בהריון מצוינת - מקלה על הגב, מחזקת שרירים ומרגיעה. יש מקלחות, שירותים, בארי חוף ומטריות להשכרה.',
+    tip:'הגיעו לפני 11:00 לפני שהחום מגיע לשיא. קרם SPF 50+ לפני, ובאמצע. שתו מים כל 20 דקות.'},
+  beach_short: {t:'10:00',a:'שחייה עדינה בחוף',e:'🌊',type:'beach',
+    short:'שחייה של 30-40 דקות ואז מנוחה בצל',
+    desc:'שחייה עדינה היא אחת הפעילויות הכי טובות להריון - מקלה על הלחץ על הגב ועל הרגליים הנפוחות. אל תשחו יותר מ-30-40 דקות. אחרי - ישיבה בצל עם ספר או מוזיקה.',
+    tip:'לא לשחות לבד! תמיד עם בן/בת הזוג. אל תשחו אם יש גלים גבוהים.'},
+  lunch_1918: {t:'13:30',a:'1918 Cuina de Mar',e:'🐟',type:'food',
+    short:'מסעדת דגים על המזח · נוף לנמל',
+    desc:'מסעדה מרשימה על הנמל של וילאנובה עם נוף פנורמי לים. מתמחים בדגים ים תיכוניים טריים. תפריט עונתי שמשתנה לפי הדיג היומי. מנות כמו דגים בתנור עצים, אורז שחור, פאייה מרנה.',
+    tip:'הזמינו "pescado del día al horno" (דג היום בתנור) - הכי טרי ובטוח להריון. בקשו "muy hecho" - מבושל היטב. אל תזמינו קרפאצ\'יו.'},
+  lunch_giraldillo: {t:'13:30',a:'El Giraldillo',e:'🥘',type:'food',
+    short:'טאפאס קלאסיות ליד Rambla Principal',
+    desc:'ברר טאפאס מקומי פופולרי - המקום שבו וילאנובה\'רים אמיתיים אוכלים. כרוקטות עוף מבושלות, טורטייה ספרדית (חביתת תפוחי אדמה), גמבאס מבושלות בחמאה, פטאטאס בראבאס. מנות קטנות שמאפשרות לטעום הרבה.',
+    tip:'הזמינו "croquetas de pollo" (כרוקטות עוף) ו"tortilla española" - שניהם בטוחים מאוד להריון. הימנעו מ"patatas aioli" - האיולי לרוב ביצה חיה.'},
+  lunch_gula: {t:'13:30',a:'Gula Gula',e:'🍕',type:'food',
+    short:'פיצרייה משפחתית · פיצה, פסטות',
+    desc:'פיצרייה אהובה בלב וילאנובה עם אווירה חמה ומשפחתית. הפיצות אפויות בתנור, הפסטה מבושלת לפי הזמנה. מאוד ידידותי להריון - אוכל מוכר, חמים, קל לעיכול. מתאים גם לבחילות קלות.',
+    tip:'בקשו "pizza quattro formaggi" עם גבינות מפוסטרות, או פסטה עם רוטב עגבניות. שאלו אם הגבינות פסטריזדות (queso pasteurizado).'},
+  siesta: {t:'15:00',a:'סיאסטה - מנוחת צהריים',e:'😴',type:'rest',
+    short:'חזרה למלון 13:00-16:00 - מיזוג ומנוחה',
+    desc:'הסיאסטה הספרדית היא מנהג של חוכמה - הימנעות מהחום הקשה של אחה"צ. בהריון, מנוחת צהריים של 1.5-2 שעות היא לא מותרות אלא הכרחית. הגוף עובד קשה בבניית תינוק - תנו לו לנוח.',
+    tip:'הדליקו מיזוג על 23-24 מעלות. שכבו על הצד השמאלי (מוריד לחץ מהווריד הראשי). זה גם הזמן לשיחת וידאו עם המשפחה בישראל!'},
+  museum_ferrocarril: {t:'17:00',a:'Museu del Ferrocarril de Catalunya',e:'🚂',type:'museum',
+    short:'מוזיאון הרכבות הגדול באירופה · מזגן',
+    desc:'אחד המוזיאונים המרתקים ביותר בספרד - 50+ קטרי קיטור, רכבות חשמליות ודיזל מהמאה ה-19 עד היום. הכל בתוך תחנת רכבת ישנה ומרהיבה. אפשר לעלות על קצת קטרים ולשבת בקרונות ישנים.',
+    desc2:'למה מושלם להריון: מזגן מעולה, הרבה ספסלים לאורך המסלול, ניתן להתקדם בקצב שלכם, ואין עמידה ממושכת. קחו שעה וחצי לפחות.',
+    tip:'כניסה כ-€8 למבוגר. פתוח שלישי-ראשון 10:00-18:00. קנו כרטיס ב-web לחיסכון.'},
+  museum_balaguer: {t:'17:00',a:'Biblioteca Museu Víctor Balaguer',e:'🏛️',type:'museum',
+    short:'מוזיאון קטלוני מ-1884 · חינם בסופ"ש',
+    desc:'אחד המוזיאונים הוותיקים בקטלוניה. אוסף אמנות יפה, פריטים ארכיאולוגיים, וחצר פנימית מרגיעה עם צל. קצר (כשעה), נוח ולא מעייף - מושלם לאחר הסיאסטה.',
+    tip:'כניסה חינמית בשבת וראשון! שעות: שלישי-שישי 10:00-14:00 ו-16:00-19:00.'},
+  rambla_evening: {t:'19:00',a:'Rambla Principal - טיול ערב',e:'🌆',type:'walk',
+    short:'שדרה ראשית עם בתי קפה, חנויות וספסלים',
+    desc:'הרמבלה הראשית של וילאנובה היא לב העיר. שדרה רחבה עם עצים, ספסלים לאורך כל הדרך, בתי קפה בחוץ, חנויות ואנשים מקומיים שיוצאים לאוויר הערב. שעת הערב בספרד היא שעת הטיול המסורתית - El Paseo.',
+    tip:'הטיול אידיאלי כשהחום יורד אחרי 18:30. אל תחמיצו גלידה ב"Heladería" המקומית - גלידה מפוסטרת מותרת להריון!'},
+  dinner_cova: {t:'21:00',a:'La Cova del Foc',e:'🔥',type:'food',
+    short:'מטבח קטלאני · תנור עצים · אווירה חמה',
+    desc:'מסעדה קטלאנית אותנטית עם ריח של עץ בוער ואווירה חמה. עוף ובשר בתנור עצים, ירקות גריל, לחם קטלאני טרי. האוכל פשוט, אמיתי ומבושל היטב - בדיוק מה שצריך בהריון.',
+    tip:'הזמינו שולחן מראש! בקשו "bien hecho" לכל מנת בשר. Pa amb tomàquet (לחם עגבנייה) בחינם - אל תדחו.'},
+  dinner_light: {t:'20:30',a:'ארוחת ערב קלה',e:'🥗',type:'food',
+    short:'מסעדה שקטה עם מנות קלות להריון',
+    desc:'בשבוע 12 הגוף לפעמים מבקש ארוחת ערב קלה ולא כבדה. סלט גדול עם עוף צלוי, מרק ירקות, דגים בתנור עם ירקות. מסעדות ים תיכוניות בוילאנובה מציעות הרבה אפשרויות כאלה.',
+    tip:'אכלו לא יאוחר מ-21:30 - גוף בהריון צריך לעכל לפני שינה. אם רעבים מוקדם יותר (17:00-18:00) - זה בסדר גמור!'},
+  train_sitges: {t:'09:30',a:'רכבת לסיטג\'ס',e:'🚆',type:'transport',
+    short:'R2S · 10 דקות · ~€3 · כל 20 דקות',
+    desc:'רכבת קצרה ונוחה לעיירת החוף המקסימה. הרכבת יוצאת מתחנת Vilanova - ראשי ומגיעה לתחנת Sitges תוך 10 דקות. תדירות גבוהה - כל 20 דקות.',
+    tip:'בקשו מושב ישוב (לא עמידה). בתחנה יש שירותים לפני הנסיעה. אל תשכחו בקבוק מים לדרך.'},
+  train_barcelona: {t:'09:00',a:'רכבת לברצלונה',e:'🚆',type:'transport',
+    short:'R2S מוילאנובה · 45 דקות · ~€7',
+    desc:'רכבת ישירה מתחנת Vilanova לתחנת Barcelona Sants. רכבת נוחה עם מושבים מרופדים. בדרך אפשר לראות את קו החוף הקטלאני היפה. הגיעו לתחנה 10 דקות לפני.',
+    tip:'קנו כרטיס T-Casual (10 נסיעות) - חוסך זמן ועלות. בתחנת Sants יש שירותים ובית קפה. בקשו "asiento preferente" (מושב עדיפות).'},
+  sitges_walk: {t:'10:00',a:'Passeig Marítim - סיטג\'ס',e:'🌊',type:'walk',
+    short:'הטיילת היפה של סיטג\'ס לאורך הים',
+    desc:'הטיילת הימית של סיטג\'ס היא אחת היפות בספרד. מסלול סלול ורחב לאורך הים עם ספסלים, עצי דקל וקפה. אורך כ-2 ק"מ - אפשר ללכת חלק ולשבת. ארכיטקטורה מרהיבה של וילות מהמאה ה-19 בצד אחד והים בצד השני.',
+    tip:'הגיעו בבוקר לפני ה-11 - הרבה יותר שקט ונעים. יש ספסלים כל 100 מטר - אל תהססו לשבת.'},
+  sitges_beach: {t:'11:00',a:'Platja de Sant Sebastià - סיטג\'ס',e:'🏖️',type:'beach',
+    short:'החוף הראשי הרחב של סיטג\'ס',
+    desc:'החוף הגדול של סיטג\'ס - חול לבן ומים כחולים שקטים. יש שירותים, מקלחות ובארי חוף (chiringuitos). שחייה מעולה גם בהריון. מים יותר פחות רדודים וצלולים יותר מוילאנובה.',
+    tip:'יכול להיות עמוס בשעות השיא. הגיעו לפני 10:30 לטוב הכי טוב. יש אזורי צל ליד הדקל.'},
+  sagrada: {t:'10:00',a:'La Sagrada Família',e:'⛪',type:'museum',
+    short:'הכנסייה של גאודי - פלא אדריכלי',
+    desc:'היצירה הגדולה ביותר של האדריכל גאודי - כנסייה שנבנית מאז 1882 ועדיין לא הסתיימה. פנים מרהיב עם עמודים כמו עצים ואור צבעוני שזורם דרך ויטראז\'ים ענקיים. אחת מהחוויות הכי מרשימות באירופה.',
+    tip:'חובה להזמין כרטיסים מראש באינטרנט (sagradafamilia.org) - עלות כ-€35. בחרו שעה בוקר מוקדמת - פחות עמוס. יש מקום ישיבה בפנים - תנוחו.'},
+  gothic: {t:'12:00',a:'Barri Gòtic - שכונה גותית',e:'🏰',type:'walk',
+    short:'מבוך רחובות עתיקים מרתקים',
+    desc:'הלב ההיסטורי של ברצלונה - רחובות צרים ואבניים עם בניינים מימי הביניים. קתדרלה גותית עצומה, כיכרות קטנות מרגיעות, חנויות בוטיק וקפה טעימים. אפשר לאבד את הדרך ולמצוא פינות מדהימות.',
+    tip:'הרחובות אבניים ולא אחידים - לבשו נעליים נוח עם תמיכה. אל תתרחקו יותר מ-500 מטר מרכז. יש ספסלים בכיכרות.'},
+  barceloneta: {t:'15:30',a:'Barceloneta - חוף ברצלונה',e:'🏖️',type:'beach',
+    short:'חוף העיר · נגיש בתחבורה ציבורית',
+    desc:'החוף הכי נגיש של ברצלונה - 5 דקות מהמרכז. חול זהוב, מים נקיים יחסית, הרבה שירותים. קצת עמוס אבל יש מרחב. טוב לשב, להיכנס למים קצת ולנוח בצל. אחרי ברצלונה יש כאן שקט.',
+    tip:'לא לצאת למים עמוק - יש זרמים. ישיבה בצל מתחת לחוופייה מספיקה! שתו הרבה מים.'},
+  train_back: {t:'18:00',a:'רכבת חזרה לוילאנובה',e:'🏠',type:'transport',
+    short:'R2S ברצלונה Sants ← וילאנובה · 45 דקות',
+    desc:'חזרה נוחה ורגועה. הרכבת עמוסה יותר בשעה זו - נסו לשבת. בדרך חזרה תוכלו לראות את קו החוף בשקיעה.',
+    tip:'הגיעו לתחנת Sants 15 דקות לפני. אם אין ישיבה - בקשו "soy embarazada" ומישהו יקום.'},
+  sitges_museum: {t:'15:00',a:'Museu Cau Ferrat - סיטג\'ס',e:'🎨',type:'museum',
+    short:'מוזיאון אמנות ייחודי בווילה ישנה',
+    desc:'מוזיאון מקסים בבית הקיץ של האמן סנטיאגו רוסיניול מסוף המאה ה-19. אוסף של ברזל מוכה, קרמיקה, ציורים ורהיטים עתיקים. הבניין עצמו - וילה ים תיכונית עם גינה - הוא יצירת אמנות.',
+    tip:'כניסה כ-€10. קצר (שעה). פתוח שלישי-ראשון 10:00-19:00. מאוורר טבעי - נעים גם בחום.'},
+  park_guell: {t:'11:00',a:'Park Güell',e:'🌿',type:'walk',
+    short:'פארק גאודי עם נוף פנורמי לברצלונה',
+    desc:'פארק קסום שתכנן גאודי - מרצפות פסיפס צבעוניות, עמודים מוזרים ויפים, ונוף מדהים לכל ברצלונה ולים. חלק מהפארק בחינם וחלק בתשלום. הכי יפה בבוקר.',
+    tip:'חלק מהמדרגות תלולות - לכו לאט ועצרו לנשום. בוקר מוקדם (לפני 10:00) - פחות עמוס. כרטיס לאזור המרכזי: כ-€13.'},
+  freixenet: {t:'11:00',a:'Freixenet Winery - פנדס',e:'🍇',type:'museum',
+    short:'ייקב מפורסם · סיור עם מיץ ענבים',
+    desc:'ייקב הקאווה (שמפניה קטלאנית) המפורסם בעולם. סיור מרתק בתת-הקרקע 20 מטר למטה, עם רכבת מיניאטורית שעוברת בין המנהרות עם הבקבוקים. המדריך מסביר על תהליך הקאווה.',
+    tip:'אתם מקבלים מיץ ענבים במקום קאווה - בקשו "zumo de uva sin alcohol". הסיור בספרדית/אנגלית. קרוב לתחנת Vilafranca del Penedès.'},
+  penedes_drive: {t:'10:00',a:'טיול בין כרמי פנדס',e:'🚗',type:'walk',
+    short:'נסיעה ציורית בין כרמי הענבים',
+    desc:'הנוף של פנדס ביוני הוא מרהיב - כרמים ירוקים עד האופק, כפרים קטנים על גבעות, חוות ישנות. טיול ברכב באזור הוא חוויה קסומה. עצרו בכפרים קטנים, קנו ריבות וגבינות מקומיות.',
+    tip:'ברכב משלכם או השכרה. GPS מומלץ. הכבישים צרים לפעמים - לא מפחיד אבל לנסוע לאט.'},
+  market_shop: {t:'09:00',a:'Mercat Public del Centre',e:'🧺',type:'shop',
+    short:'שוק מזון מסורתי · 08:00-14:00',
+    desc:'השוק המרכזי של וילאנובה - חוויה קטלאנית אמיתית. דוכנים של ירקות וירקות צבעוניים, דגים טריים (לבישול!), בשר, גבינות מקומיות, זיתים, פירות. האווירה חיה ועממית.',
+    tip:'קנו ירקות לחדר המלון. גבינות קשות בלבד (manchego, idiazabal). אל תקנו דגים נאים לאכילה ישירה. קחו שקית בד.'},
+};
+
+// ── TRIP PLANS ─────────────────────────────────────────────
+const PLANS = {
+  relax: {
+    1:[{d:'יום חוף ומנוחה מושלם',sub:'וילאנובה · שחייה · סיאסטה · ערב ברמבלה',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]}],
+    2:[
+      {d:'יום 1 - חוף ורוגע בוילאנובה',sub:'שחייה עדינה · מנוחה · טאפאס',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+      {d:'יום 2 - שחייה שנייה וקניות',sub:'חוף נוסף · Farmacia · ערב שקט',items:[ACT.breakfast,ACT.beach_short,ACT.lunch_gula,ACT.siesta,ACT.market_shop,ACT.dinner_cova]},
+    ],
+    3:[
+      {d:'יום 1 - חוף ורוגע',sub:'שחייה · מנוחה',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - חוף ומוזיאון',sub:'שחייה · תרבות · ארוחת ערב',items:[ACT.breakfast,ACT.beach_short,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_balaguer,ACT.dinner_light]},
+      {d:'יום 3 - יום טיול לסיטגס',sub:'10 דק\' ברכבת · חוף וטיילת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]},
+    ],
+    5:[
+      {d:'יום 1 - חוף ורוגע',sub:'שחייה · מנוחה',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - חוף ומוזיאון',sub:'שחייה · תרבות',items:[ACT.breakfast,ACT.beach_short,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_balaguer,ACT.dinner_light]},
+      {d:'יום 3 - סיטגס',sub:'10 דק\' ברכבת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_1918,ACT.siesta,ACT.dinner_cova]},
+      {d:'יום 4 - שוק וקניות',sub:'שוק מקומי · חנויות · חוף',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_gula,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+      {d:'יום 5 - יום חוף אחרון',sub:'נהנים מהים לפני הטיסה',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_ferrocarril,ACT.dinner_cova]},
+    ],
+    7:[]
+  },
+  culture:{
+    1:[{d:'יום תרבות ומוזיאונים',sub:'מוזיאון רכבות · Balaguer · ארוחת ערב',items:[ACT.breakfast,ACT.museum_ferrocarril,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_balaguer,ACT.rambla_evening,ACT.dinner_cova]}],
+    2:[
+      {d:'יום 1 - מוזיאונים בוילאנובה',sub:'רכבות · Balaguer · Espai Far',items:[ACT.breakfast,ACT.museum_ferrocarril,ACT.lunch_1918,ACT.siesta,ACT.museum_balaguer,ACT.dinner_cova]},
+      {d:'יום 2 - ברצלונה התרבותית',sub:'45 דק\' ברכבת · גאודי · גותי',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.gothic,ACT.lunch_1918,ACT.siesta,ACT.train_back,ACT.dinner_light]},
+    ],
+    3:[
+      {d:'יום 1 - מוזיאונים וילאנובה',sub:'רכבות · Balaguer',items:[ACT.breakfast,ACT.museum_ferrocarril,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_balaguer,ACT.dinner_cova]},
+      {d:'יום 2 - ברצלונה: גאודי',sub:'Sagrada Familia · Park Guell · גותי',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.park_guell,ACT.lunch_1918,ACT.barceloneta,ACT.train_back]},
+      {d:'יום 3 - טרגונה ההיסטורית',sub:'אמפיתיאטרון רומי · דייגים · מנוחה',items:[ACT.breakfast,{...ACT.train_sitges,a:'רכבת לטרגונה',short:'~40 דקות · ~€6',desc:'רכבת נוחה לעיר הרומית העתיקה - הכי חשובה בספרד לאחר רומא. בדרך נוף לחוף הקטלאני.',tip:'קנו כרטיס הלוך-חזור. תחנת Tarragona במרכז העיר.'},ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+    ],
+    5:[],7:[]
+  },
+  cities:{
+    1:[{d:'יום טיול לסיטגס',sub:'10 דקות ברכבת · חוף · טיילת · מוזיאון',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'רכבת חזרה לוילאנובה',short:'10 דקות',desc:'חזרה נוחה. הרכבות כל 20 דקות.',tip:'אם עייפים - קחו מונית (Cabify).'},ACT.dinner_light]}],
+    2:[
+      {d:'יום 1 - סיטגס',sub:'חוף · טיילת · מוזיאון',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'רכבת חזרה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 2 - ברצלונה',sub:'45 דק\' ברכבת · גאודי · חוף',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+    ],
+    3:[
+      {d:'יום 1 - סיטגס',sub:'חוף · טיילת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'חזרה לוילאנובה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 2 - ברצלונה',sub:'גאודי · שכונה גותית',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+      {d:'יום 3 - פנדס ויין',sub:'כרמים · Freixenet · כפרים',items:[ACT.breakfast,ACT.penedes_drive,ACT.freixenet,ACT.lunch_gula,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+    ],
+    5:[
+      {d:'יום 1 - סיטגס',sub:'חוף · טיילת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,{...ACT.train_sitges,t:'17:30',a:'חזרה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 2 - ברצלונה: גאודי',sub:'Sagrada · Park Guell',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.park_guell,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+      {d:'יום 3 - ברצלונה: Barri Gotic',sub:'שכונה גותית · שוק Boqueria',items:[ACT.breakfast,ACT.train_barcelona,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_light]},
+      {d:'יום 4 - פנדס',sub:'כרמים · Freixenet',items:[ACT.breakfast,ACT.penedes_drive,ACT.freixenet,ACT.lunch_gula,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 5 - טרגונה',sub:'40 דק\' · אמפיתיאטרון רומי',items:[ACT.breakfast,{...ACT.train_sitges,a:'רכבת לטרגונה',short:'~40 דקות'},ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+    ],
+    7:[]
+  },
+  food:{
+    1:[{d:'יום גסטרונומי קטלאני',sub:'שוק · מסעדות · טאפאס · גלידה',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]}],
+    2:[
+      {d:'יום 1 - טעמים מקומיים',sub:'שוק · מסעדת נמל · טאפאס',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_giraldillo||ACT.dinner_light]},
+      {d:'יום 2 - ברצלונה גסטרונומית',sub:'45 דק\' ברכבת · Boqueria · מסעדות גותי',items:[ACT.breakfast,ACT.train_barcelona,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+    ],
+    3:[
+      {d:'יום 1 - וילאנובה · שוק ומסעדות',sub:'שוק · חוף · נמל',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_1918,ACT.siesta,ACT.dinner_cova]},
+      {d:'יום 2 - טאפאס ועוד',sub:'El Giraldillo · Gula Gula',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_giraldillo,ACT.siesta,ACT.museum_balaguer,ACT.dinner_light]},
+      {d:'יום 3 - ברצלונה גסטרונומית',sub:'Boqueria · Barri Gotic',items:[ACT.breakfast,ACT.train_barcelona,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_light]},
+    ],
+    5:[],7:[]
+  },
+  mix:{
+    1:[{d:'יום שילוב מושלם',sub:'חוף · מוזיאון · אוכל · ערב ברמבלה',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.museum_ferrocarril,ACT.rambla_evening,ACT.dinner_cova]}],
+    2:[
+      {d:'יום 1 - וילאנובה הכל',sub:'חוף · מוזיאון · טאפאס',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.museum_ferrocarril,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - סיטגס',sub:'חוף · טיילת · מוזיאון',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'חזרה',short:'10 דקות'},ACT.dinner_light]},
+    ],
+    3:[
+      {d:'יום 1 - וילאנובה',sub:'חוף · מוזיאון רכבות · טאפאס',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.museum_ferrocarril,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - סיטגס',sub:'10 דק\' ברכבת · חוף · מוזיאון',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'חזרה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 3 - ברצלונה',sub:'45 דק\' · גאודי · חוף · גותי',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+    ],
+    5:[
+      {d:'יום 1 - וילאנובה',sub:'חוף · מוזיאון',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.museum_ferrocarril,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - סיטגס',sub:'חוף · טיילת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'חזרה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 3 - ברצלונה',sub:'גאודי · גותי',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+      {d:'יום 4 - שוק ומנוחה',sub:'שוק · קניות · חוף',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_gula,ACT.siesta,ACT.museum_balaguer,ACT.dinner_light]},
+      {d:'יום 5 - פנדס',sub:'כרמים · Freixenet',items:[ACT.breakfast,ACT.penedes_drive,ACT.freixenet,ACT.lunch_1918,ACT.siesta,ACT.rambla_evening,ACT.dinner_cova]},
+    ],
+    7:[
+      {d:'יום 1 - וילאנובה',sub:'חוף · מוזיאון',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.museum_ferrocarril,ACT.rambla_evening,ACT.dinner_cova]},
+      {d:'יום 2 - סיטגס',sub:'10 דק\' ברכבת',items:[ACT.breakfast,ACT.train_sitges,ACT.sitges_walk,ACT.sitges_beach,ACT.lunch_giraldillo,ACT.sitges_museum,{...ACT.train_sitges,t:'17:30',a:'חזרה',short:'10 דקות'},ACT.dinner_light]},
+      {d:'יום 3 - ברצלונה: גאודי',sub:'Sagrada · Park Guell',items:[ACT.breakfast,ACT.train_barcelona,ACT.sagrada,ACT.park_guell,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+      {d:'יום 4 - מנוחה בוילאנובה',sub:'חוף · שוק · קניות',items:[ACT.breakfast,ACT.market_shop,ACT.beach_short,ACT.lunch_gula,ACT.siesta,ACT.museum_balaguer,ACT.dinner_light]},
+      {d:'יום 5 - ברצלונה: גותי',sub:'שכונה גותית · Boqueria',items:[ACT.breakfast,ACT.train_barcelona,ACT.gothic,ACT.lunch_1918,ACT.barceloneta,ACT.train_back,ACT.dinner_cova]},
+      {d:'יום 6 - פנדס',sub:'כרמים · Freixenet',items:[ACT.breakfast,ACT.penedes_drive,ACT.freixenet,ACT.lunch_giraldillo,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]},
+      {d:'יום 7 - יום אחרון · חוף',sub:'שחייה אחרונה · קניות · ערב',items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_1918,ACT.siesta,ACT.market_shop,ACT.rambla_evening,ACT.dinner_cova]},
+    ]
+  }
+};
+
+// ── LOCATION ───────────────────────────────────────────────
+const DEF = {city:'Vilanova i la Geltrú',sub:'קטלוניה, ספרד · נקודת מוצא קבועה',lat:41.2250,lon:1.7248};
+let curLat = DEF.lat, curLon = DEF.lon;
+
+function setLoc(city,sub){
+  document.getElementById('locCity').textContent=city;
+  document.getElementById('locSub').textContent=sub;
+}
+function showSt(msg,cls){
+  const e=document.getElementById('locSt');
+  e.textContent=msg; e.className='loc-status '+cls;
+}
+function getGPS(){
+  showSt('מאתר מיקום GPS...','ls-w');
+  if(!navigator.geolocation){showSt('דפדפן לא תומך ב-GPS','ls-err');return;}
+  navigator.geolocation.getCurrentPosition(
+    p=>{curLat=p.coords.latitude;curLon=p.coords.longitude;
+      setLoc('מיקומי הנוכחי','GPS: '+curLat.toFixed(4)+', '+curLon.toFixed(4));
+      showSt('מיקום עודכן בהצלחה!','ls-ok');},
+    ()=>{showSt('לא הצלחנו - נשארים עם וילאנובה','ls-err');setLoc(DEF.city,DEF.sub);},
+    {enableHighAccuracy:true,timeout:10000}
+  );
+}
+function toggleMan(){const b=document.getElementById('manBox');b.style.display=b.style.display==='none'?'block':'none';}
+function applyMan(){const v=document.getElementById('manAddr').value.trim();if(!v)return;setLoc(v,'מיקום ידני');showSt('מיקום עודכן ל: '+v,'ls-ok');document.getElementById('manBox').style.display='none';}
+function resetVil(){setLoc(DEF.city,DEF.sub);document.getElementById('manAddr').value='';document.getElementById('manBox').style.display='none';showSt('חזרתם לוילאנובה','ls-ok');}
+
+// ── TABS ────────────────────────────────────────────────────
+function go(name,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sec-'+name).classList.add('on');
+  el.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='cities')initMap();
+}
+
+// ── TOGGLES ─────────────────────────────────────────────────
+function toggle(el){
+  const d=el.querySelector('.rest-detail');
+  const a=el.querySelector('.rest-arrow');
+  d.classList.toggle('open');
+  a.textContent=d.classList.contains('open')?'▲':'▼';
+}
+function toggleA(el){el.querySelector('.attr-exp').classList.toggle('open');}
+function toggleCity(el){el.querySelector('.city-expand').classList.toggle('open');}
+function toggleShop(el){el.nextElementSibling.classList.toggle('open');}
+
+// ── SHOP MAP SEARCH (Nominatim - free, no API key) ────────
+let shopMap = null;
+function searchShopOnMap(){
+  const q = document.getElementById('shopSearchInput').value.trim();
+  if(!q) return;
+  const resEl = document.getElementById('shopRes');
+  const mapEl = document.getElementById('shopMapEl');
+  resEl.textContent = 'מחפש...';
+  resEl.className = 'shop-res show';
+
+  const query = encodeURIComponent(q + ' Vilanova i la Geltrú');
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + query + '&limit=5&accept-language=he')
+    .then(r => r.json())
+    .then(data => {
+      if(!data.length){
+        resEl.textContent = 'לא נמצא "' + q + '" בוילאנובה. נסו שם אחר.';
+        return;
+      }
+      mapEl.style.display = 'block';
+      if(!shopMap){
+        shopMap = L.map('shopMapEl').setView([41.2250, 1.7248], 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(shopMap);
+      }
+      shopMap.eachLayer(l => { if(l instanceof L.Marker) shopMap.removeLayer(l); });
+      const bounds = [];
+      data.forEach(p => {
+        const lat = parseFloat(p.lat), lon = parseFloat(p.lon);
+        bounds.push([lat, lon]);
+        L.marker([lat, lon]).addTo(shopMap)
+          .bindPopup('<strong>' + (p.display_name.split(',')[0]) + '</strong><br>' + p.display_name.split(',').slice(1,3).join(','))
+          .openPopup();
+      });
+      if(bounds.length) shopMap.fitBounds(bounds, {padding:[30,30]});
+      resEl.textContent = 'נמצאו ' + data.length + ' תוצאות על המפה';
+    })
+    .catch(() => { resEl.textContent = 'שגיאת חיבור - בדקו אינטרנט'; });
+}
+
+// ── SEARCH ──────────────────────────────────────────────────
+function fuzzyMatch(text, q) {
+  // 1. exact match
+  if (text.includes(q)) return 100;
+  // 2. word-by-word match
+  const words = q.split(' ').filter(w => w.length >= 2);
+  if (words.some(w => text.includes(w))) return 80;
+  // 3. trigram match (chunks of 3 chars) - catches typos
+  if (q.length >= 3) {
+    for (let i = 0; i <= q.length - 3; i++) {
+      if (text.includes(q.slice(i, i + 3))) return 60;
+    }
+  }
+  // 4. bigram match (chunks of 2 chars)
+  if (q.length >= 2) {
+    let hits = 0;
+    for (let i = 0; i <= q.length - 2; i++) {
+      if (text.includes(q.slice(i, i + 2))) hits++;
+    }
+    if (hits >= 2) return 40;
+  }
+  return 0;
+}
+
+function doSearch(q) {
+  const res = document.getElementById('searchRes');
+  if (!q || q.length < 2) { res.style.display = 'none'; return; }
+  const qNorm = q.toLowerCase().trim();
+  const scored = SEARCH_DATA.map(i => {
+    const allText = (i.t + ' ' + i.d + ' ' + i.cat).toLowerCase();
+    const score = fuzzyMatch(allText, qNorm);
+    return { ...i, score };
+  }).filter(i => i.score > 0).sort((a, b) => b.score - a.score);
+
+  if (!scored.length) {
+    res.innerHTML = '<div class="sr-item" style="color:#888;cursor:default;">לא נמצאו תוצאות עבור "' + q + '"</div>';
+    res.style.display = 'block';
+    return;
+  }
+  res.innerHTML = scored.slice(0, 8).map(i =>
+    `<div class="sr-item" onclick="gotoResult('${i.tab}','${i.t.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')" >
+      <strong>${i.t}</strong><br>
+      <span class="sri-cat">${i.cat} · ${i.d.slice(0,60)}</span>
+    </div>`
+  ).join('');
+  res.style.display = 'block';
+}
+function gotoResult(tab, title) {
+  closeSearch();
+  document.getElementById('searchQ').value = '';
+  const tabs = document.querySelectorAll('.tab');
+  const tabMap = {home:0,rest:1,attr:2,cities:3,shops:4,plan:5,trans:6,tips:7,med:8};
+  go(tab, tabs[tabMap[tab] || 0]);
+  if (!title) return;
+  setTimeout(() => {
+    const sec = document.getElementById('sec-' + tab);
+    if (!sec) return;
+    const headings = sec.querySelectorAll('h3');
+    for (const h of headings) {
+      const ht = h.textContent.trim();
+      if (ht === title || title.includes(ht) || ht.includes(title)) {
+        const card = h.closest('.rest,.attr,.city-card,.shop-card,.card');
+        if (!card) continue;
+        // Auto-expand collapsible card
+        const detail = card.querySelector('.rest-detail,.attr-exp,.city-expand,.shop-expand');
+        if (detail) detail.classList.add('open');
+        // Scroll to card
+        card.scrollIntoView({behavior:'smooth', block:'center'});
+        // Flash highlight border
+        card.style.outline = '3px solid #e63950';
+        card.style.outlineOffset = '2px';
+        setTimeout(() => { card.style.outline = ''; card.style.outlineOffset = ''; }, 2500);
+        break;
+      }
+    }
+  }, 150);
+}
+function closeSearch() { document.getElementById('searchRes').style.display = 'none'; }
+
+// ── TRIP PLANNER ────────────────────────────────────────────
+function buildPlan(){
+  const days=parseInt(document.getElementById('planDays').value);
+  const style=document.getElementById('planStyle').value;
+  const base=document.getElementById('planBase').value;
+  const plan=PLANS[style];
+
+  // Find best matching plan (exact or closest lower)
+  const availKeys=Object.keys(plan).filter(k=>plan[k]&&plan[k].length).map(Number).sort((a,b)=>a-b);
+  const bestKey=availKeys.filter(k=>k<=days).pop() || availKeys[0] || 1;
+  let res=plan[bestKey]||[];
+
+  // If style has no data, fallback to mix
+  if(!res.length) res=PLANS.mix[Math.min(days,3)]||PLANS.mix[1]||[];
+
+  // Build extra days from day-1 plan if user asked for more days than we have
+  if(days > bestKey && res.length){
+    for(let d=res.length+1;d<=days;d++){
+      res=[...res,{
+        d:'יום '+d+' - יום חופשי',sub:'בחרו לפי חשק',
+        items:[ACT.breakfast,ACT.beach_morning,ACT.lunch_giraldillo,ACT.siesta,ACT.rambla_evening,ACT.dinner_light]
+      }];
+    }
+  }
+
+  // Adjust day names to reflect base city
+  const cityNames={vilanova:'וילאנובה',sitges:'סיטגס',barcelona:'ברצלונה',tarragona:'טרגונה'};
+  const baseName=cityNames[base]||'וילאנובה';
+
+  const el=document.getElementById('planResult');
+  if(!res.length){el.innerHTML='<div class="al al-i"><div class="ai">ℹ️</div><div>מדריך טיולים בקרוב!</div></div>';el.className='plan-result show';return;}
+
+  const styleNames={relax:'מנוחה וחוף',culture:'תרבות ומוזיאונים',cities:'סיורים בערים',food:'אוכל וקניות',mix:'מגוון'};
+  const styleName=styleNames[style]||style;
+
+  el.innerHTML=`
+    <div class="plan-summary">
+      <h3>📅 מדריך ${days} ימים · ${baseName}</h3>
+      <p>מותאם אישית לשבוע 12 · ${styleName}</p>
+      <div class="ps-pills">
+        <span class="ps-pill">📍 ${baseName}</span>
+        <span class="ps-pill">🤰 שבוע 12</span>
+        <span class="ps-pill">☀️ ${days} ${days===1?'יום':'ימים'}</span>
+        <span class="ps-pill">✨ ${styleName}</span>
+      </div>
+    </div>
+  ` + res.map((day,di)=>{
+    const typeClass={food:'dot-food',beach:'dot-beach',museum:'dot-museum',rest:'dot-rest',walk:'dot-walk',shop:'dot-shop',transport:'dot-transport'};
+    const items=(day.items||[]).map(i=>{
+      const tc=typeClass[i.type]||'dot-walk';
+      const descHtml=i.desc?`<div class="tl-desc">${i.desc}${i.desc2?'<br><br>'+i.desc2:''}</div>`:'';
+      const tipHtml=i.tip?`<div class="tl-tip"><span>💡</span><span>${i.tip}</span></div>`:'';
+      return `<div class="plan-tl-item">
+        <div class="plan-tl-left">
+          <div class="plan-tl-time">${i.t||''}</div>
+          <div class="plan-tl-dot ${tc}">${i.e||'📌'}</div>
+        </div>
+        <div class="plan-tl-body">
+          <h5>${i.a}</h5>
+          <div class="tl-short">${i.short||''}</div>
+          ${descHtml}
+          ${tipHtml}
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="plan-day-card">
+      <div class="plan-day-hd">
+        <div class="plan-day-num">${di+1}</div>
+        <div>
+          <div class="plan-day-title">${day.d}</div>
+          <div class="plan-day-sub">${day.sub||''}</div>
+        </div>
+      </div>
+      <div class="plan-tl">${items}</div>
+    </div>`;
+  }).join('');
+  el.className='plan-result show';
+}
+
+// ── MAP ─────────────────────────────────────────────────────
+let mapInited=false;
+function initMap(){
+  if(mapInited)return;
+  mapInited=true;
+  const map=L.map('mapEl').setView([41.22,1.72],9);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap',maxZoom:18
+  }).addTo(map);
+
+  const places=[
+    {lat:41.2250,lon:1.7248,name:'Vilanova i la Geltrú',emoji:'📍',color:'#e63950',info:'נקודת המוצא שלכם'},
+    {lat:41.2387,lon:1.8056,name:'Sitges',emoji:'🏖️',color:'#2ec4b6',info:'10 ק"מ · 10 דק\' ברכבת'},
+    {lat:41.3851,lon:2.1734,name:'Barcelona',emoji:'🏙️',color:'#764ba2',info:'45 ק"מ · 45 דק\' ברכבת'},
+    {lat:41.1189,lon:1.2445,name:'Tarragona',emoji:'🏛️',color:'#f4a261',info:'45 ק"מ · 40 דק\' ברכבת'},
+    {lat:41.3464,lon:1.5728,name:'Vilafranca del Penedès',emoji:'🍷',color:'#4caf50',info:'25 ק"מ · אזור יין'},
+  ];
+
+  places.forEach(p=>{
+    const icon=L.divIcon({
+      className:'',
+      html:`<div style="background:${p.color};color:white;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.3);border:2px solid white;">${p.emoji}</div>`,
+      iconSize:[36,36],iconAnchor:[18,18]
+    });
+    L.marker([p.lat,p.lon],{icon}).addTo(map)
+      .bindPopup(`<strong>${p.name}</strong><br>${p.info}`);
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+setLoc(DEF.city,DEF.sub);
+</script>
+</body>
+</html>
