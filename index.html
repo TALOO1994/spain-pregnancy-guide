@@ -701,9 +701,12 @@
       </div>
       <div class="c-do" style="margin-top:10px;">
         <h4>🅿️ חניות בסיטג'ס:</h4>
-        <div class="do-item">🟢 <span><strong>Parking Platja</strong> - ליד החוף הראשי · €2/שעה</span></div>
-        <div class="do-item">🟢 <span><strong>Parking Estació</strong> - ליד תחנת הרכבת · €1.20/שעה · 5 דק' הליכה</span></div>
-        <div class="do-item">🟡 <span><strong>Carrer de Jesús</strong> - חניה ברחוב · חינם אחרי 20:00</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Platja</strong> - ליד החוף הראשי · €2/שעה · 200 מקומות</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Estació</strong> - ליד תחנת הרכבת · €1.20/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Espanya</strong> - Carrer dʼEspanya · €1.50/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Ribera</strong> - ליד הטיילת · €2.50/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Zona blava</strong> - Carrer Major · €1/שעה · 2 שעות מקסימום</span></div>
+        <div class="do-item">🟩 <span><strong>Carrer de Jesús</strong> - חינם אחרי 20:00 ובסופ"ש</span></div>
         <div class="do-item">💡 <span>קיץ = עמוס מאוד. הגיעו לפני 10:00 או בואו ברכבת!</span></div>
       </div>
       <div id="parkMapSitges" style="height:180px;border-radius:12px;margin-top:10px;"></div>
@@ -728,6 +731,16 @@
         <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#ff9800,#f57c00);"></div>
         <div class="rest-body"><h3>La Nansa</h3><div class="addr">📍 Carrer de la Carreta 24, Sitges</div><div class="desc">מסעדה ים תיכונית קלאסית - פאייה ביתית מהשרות</div><div class="tags"><span class="tag tg">פאייה ביתית</span><span class="tag tb">כשר להריון</span></div></div><div class="rest-arrow">▼</div></div>
         <div class="rest-detail"><p><strong>להזמין:</strong> Arròs a la cassola (אורז בסיר עם דגים), caldoso (מרק אורז דגים), fideuà.</p><p><strong>טיפ הריון:</strong> הפאייה מבושלת 20 דקות לפחות - מושלמת! מינימום 2 אנשים לפאייה.</p><div class="hrs">⏰ שלישי-ראשון 13:30-16:00 | 20:30-23:00 · סגור שני</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#764ba2,#9c27b0);"></div>
+        <div class="rest-body"><h3>La Sima</h3><div class="addr">📍 Carrer del Pecat 5, Sitges</div><div class="desc">מסעדה ים תיכונית אינטימית - מנות קטלאניות מיוחדות</div><div class="tags"><span class="tag tg">קטלאני</span><span class="tag tp">אינטימי</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Esqueixada de bacallà (סלט דג מלוח קטלאני), croquetes de bacallà, sepia a la planxa, מנות עונה.</p><p><strong>טיפ הריון:</strong> מקום שקט ורומנטי. הדג המלוח מבושל היטב - בטוח לחלוטין. הזמינו מראש בסופי שבוע.</p><div class="hrs">⏰ שלישי-ראשון 13:00-16:00 | 20:00-22:30</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#00897b,#26a69a);"></div>
+        <div class="rest-body"><h3>Picnic Restaurant</h3><div class="addr">📍 Carrer de Sant Pau 3, Sitges</div><div class="desc">מסעדת ברנץ' ואוכל בריא - אווירה רגועה ומודרנית</div><div class="tags"><span class="tag tg">בריא</span><span class="tag tp">ברנץ'</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> אבוקדו טוסט, ביצים בנדיקט, סלטים גדולים, סנדוויצ'ים ביתיים, עוגות ביתיות.</p><p><strong>טיפ הריון:</strong> אוכל קל ועדין - מצוין לבחילות בוקר. מקום שקט ונעים. ביצים מבושלות היטב בלבד.</p><div class="hrs">⏰ כל הימים 09:00-17:00</div></div>
       </div>
       <div class="tags" style="margin-top:10px;"><span class="tag tg">מומלץ מאוד</span><span class="tag tb">10 דק' ברכבת</span><span class="tag to">תיירותי</span></div>
     </div>
@@ -754,11 +767,15 @@
       </div>
       <div class="c-do" style="margin-top:10px;">
         <h4>🅿️ חניות בברצלונה:</h4>
-        <div class="do-item">🟢 <span><strong>BSM Sants</strong> - ליד תחנת Sants · €3/שעה · הכי נוח</span></div>
+        <div class="do-item">🟢 <span><strong>BSM Sants</strong> - ליד תחנת Sants · €3/שעה · 24/7</span></div>
         <div class="do-item">🟢 <span><strong>SABA Passeig de Gràcia</strong> - מרכז · €4/שעה · ליד גאודי</span></div>
         <div class="do-item">🟢 <span><strong>Parking Barceloneta</strong> - ליד החוף · €2.50/שעה</span></div>
-        <div class="do-item">🟢 <span><strong>Parking Sagrada Família</strong> - Carrer de Provença · €3.50/שעה</span></div>
-        <div class="do-item">⚠️ <span>ברצלונה יקרה! עדיף רכבת מוילאנובה - חוסכת €20-30 ביום</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Sagrada Família</strong> - €3.50/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Urquinaona</strong> - מרכז · €3.50/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Port Olímpic</strong> - נמל אולימפי · €2/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Plaça Catalunya</strong> - מרכז · €4/שעה · 24/7</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Gràcia</strong> - שכונת גראסיה · €2.50/שעה</span></div>
+        <div class="do-item">⚠️ <span>עדיף רכבת! חוסכת €20-30 ביום על חניה</span></div>
       </div>
       <div id="parkMapBcn" style="height:200px;border-radius:12px;margin-top:10px;"></div>
       <div class="c-do" style="margin-top:12px;"><h4>🍽️ מסעדות בברצלונה:</h4></div>
@@ -788,6 +805,21 @@
         <div class="rest-body"><h3>La Pepita Gràcia</h3><div class="addr">📍 Carrer de Còrsega 343 · גראסיה</div><div class="desc">מסעדה קלה ונעימה - מנות ים תיכוניות בריאות ויפות</div><div class="tags"><span class="tag tg">בריא וטעים</span><span class="tag tp">נעים</span></div></div><div class="rest-arrow">▼</div></div>
         <div class="rest-detail"><p><strong>להזמין:</strong> אבוקדו טוסט, פסטה ביתית, ירקות צלויים, עוף גריל, סלטים גדולים.</p><p><strong>טיפ הריון:</strong> אוכל קל ובריא - מושלם לבחילות. מנות קטנות ומגוונות.</p><div class="hrs">⏰ שני-שישי 13:00-16:00 | 20:00-23:00 · סופ"ש 12:00-16:30</div></div>
       </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#1565c0,#1976d2);"></div>
+        <div class="rest-body"><h3>Els Quatre Gats</h3><div class="addr">📍 Carrer de Montsió 3 · Barri Gòtic</div><div class="desc">מסעדה היסטורית מ-1897 - מקום מפגש של פיקאסו ומודיליאני</div><div class="tags"><span class="tag tg">היסטורי</span><span class="tag tb">תרבות</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Escalivada (ירקות צלויים), Croquetes de pernil, Fricandó (תבשיל בקר), crema catalana.</p><p><strong>טיפ הריון:</strong> חוויה תרבותית ייחודית - פיקאסו בילה כאן בצעירותו. מנות בשר מבושלות היטב. אטמוספרה מיוחדת!</p><div class="hrs">⏰ כל הימים 09:00-01:00</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#d81b60,#e91e63);"></div>
+        <div class="rest-body"><h3>Boqueria - Pinotxo Bar</h3><div class="addr">📍 Mercat de la Boqueria, Las Ramblas</div><div class="desc">ברר אגדי בשוק בוקריה - ארוחת בוקר ספרדית אמיתית</div><div class="tags"><span class="tag tg">אגדי</span><span class="tag tp">ארוחת בוקר</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Garbanzos (חומוס ספרדי), bacallà amb mel (דג עם דבש), ביצים מקושקשות, Catalan breakfast.</p><p><strong>טיפ הריון:</strong> הגיעו ב-08:00-10:00 לפני ההמון. עמדת בר - בקשו כסא. הכל מבושל טרי. חוויה של פעם בחיים!</p><div class="hrs">⏰ שני-שבת 07:30-15:00 · סגור ראשון</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#f57f17,#ff8f00);"></div>
+        <div class="rest-body"><h3>La Cova Fumada</h3><div class="addr">📍 Carrer del Baluard 56 · ברצלונטה</div><div class="desc">אגדת ברצלונה - ממציאי הבומבה! מקומי 100%</div><div class="tags"><span class="tag tg">אגדי</span><span class="tag tb">מקומי</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> La bomba (כדור תפוח אדמה ממולא בשר - הפטנט שלהם!), calamars, ירקות צלויים, ביצה מטוגנת.</p><p><strong>טיפ הריון:</strong> הבומבה מטוגנת טרי - חמה ובטוחה לחלוטין. אין תפריט - שאלו מה יש היום. סגורים לארוחת ערב!</p><div class="hrs">⏰ שני-שבת 09:00-15:30 בלבד · סגור ראשון</div></div>
+      </div>
       <div class="tags" style="margin-top:10px;"><span class="tag tp">בייבימון</span><span class="tag tb">45 דק' ברכבת</span><span class="tag tr">עמוס - תנוחו!</span></div>
     </div>
   </div>
@@ -812,9 +844,12 @@
       </div>
       <div class="c-do" style="margin-top:10px;">
         <h4>🅿️ חניות בטרגונה:</h4>
-        <div class="do-item">🟢 <span><strong>Parking Amfiteatre</strong> - ליד האמפיתיאטרון · €1.50/שעה</span></div>
-        <div class="do-item">🟢 <span><strong>Parking Port</strong> - ליד הנמל · €1/שעה · קרוב לאוכל</span></div>
-        <div class="do-item">🟢 <span><strong>Parking Centre Comercial</strong> - מרכז העיר · €1.20/שעה</span></div>
+        <div class="do-item">🔵 <span><strong>Parking Amfiteatre</strong> - ליד האמפיתיאטרון · €1.50/שעה</span></div>
+        <div class="do-item">🔵 <span><strong>Parking Port Pesquer</strong> - נמל הדייגים · €1/שעה · 24/7</span></div>
+        <div class="do-item">🔵 <span><strong>Parking Centre Comercial</strong> - מרכז קניות · €1.20/שעה</span></div>
+        <div class="do-item">🔵 <span><strong>Parking Rambla Nova</strong> - הרמבלה הראשית · €1.80/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Plaça de la Font</strong> - כיכר מרכזית · חניה חינמית לילה</span></div>
+        <div class="do-item">🟢 <span><strong>Zona verda</strong> - תושבים + תיירים · €0.80/שעה</span></div>
         <div class="do-item">💡 <span>טרגונה נוחה לחניה - הרבה פחות עמוסה מברצלונה!</span></div>
       </div>
       <div id="parkMapTarr" style="height:180px;border-radius:12px;margin-top:10px;"></div>
@@ -834,6 +869,21 @@
         <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#4caf50,#8bc34a);"></div>
         <div class="rest-body"><h3>Morgana Bar & Kitchen</h3><div class="addr">📍 Carrer de les Coques 3, Tarragona</div><div class="desc">ברר מודרני עם מנות יצירתיות בלב העיר העתיקה</div><div class="tags"><span class="tag tg">מודרני</span><span class="tag tp">מחיר נוח</span></div></div><div class="rest-arrow">▼</div></div>
         <div class="rest-detail"><p><strong>להזמין:</strong> כרוקטות ביתיות, המבורגר עוף ביתי, פסטה שרימפס, סלטים מיוחדים.</p><p><strong>טיפ הריון:</strong> מקום רגוע ונעים ליד האמפיתיאטרון. מושלם לפסק זמן אחרי הסיור.</p><div class="hrs">⏰ שני-שבת 12:00-24:00</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#0277bd,#0288d1);"></div>
+        <div class="rest-body"><h3>El Llagut</h3><div class="addr">📍 Carrer de Trafalgar 25, Tarragona</div><div class="desc">מסעדת ים קלאסית ב-El Serrallo - פירות ים טריים מהיום</div><div class="tags"><span class="tag tg">פירות ים</span><span class="tag tb">טרי מאוד</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Suquet de peix (תבשיל דגים קטלאני), arròs negre (אורז שחור בדיו), גמבאס a la planxa, ברבוניה בתנור.</p><p><strong>טיפ הריון:</strong> הדגים עוברים ישירות מהסירות למסעדה. הכל מבושל טרי. ריח הים כאן בא ממש!</p><div class="hrs">⏰ שלישי-ראשון 13:00-16:00 | 20:00-23:00</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#e65100,#ef6c00);"></div>
+        <div class="rest-body"><h3>AQ Restaurant</h3><div class="addr">📍 Carrer de les Coques 7, Tarragona</div><div class="desc">מסעדת שף יוקרתית - מטבח קטלאני עכשווי ויצירתי</div><div class="tags"><span class="tag tg">שף</span><span class="tag tb">יוקרתי</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> תפריט דגסטציה קצר, דג יום מבושל, ירקות שורש, קינוחים יצירתיים - שאלו מה בטוח להריון.</p><p><strong>טיפ הריון:</strong> מסעדת גורמה - מושלמת לארוחה מיוחדת. הצוות ידע להסביר כל מנה. הזמינו שבוע מראש!</p><div class="hrs">⏰ שלישי-שבת 13:30-15:30 | 21:00-23:00</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#558b2f,#689f38);"></div>
+        <div class="rest-body"><h3>Barquet Tarragona</h3><div class="addr">📍 Carrer del Gasòmetre 16, Tarragona</div><div class="desc">מסעדה עממית ואהובה - ארוחות צהריים עם תפריט יומי</div><div class="tags"><span class="tag tg">עממי</span><span class="tag tp">מחיר נוח</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Menú del día - 3 מנות + שתייה ב-€12-15. כולל: מרק, בשר/דג מבושל, קינוח.</p><p><strong>טיפ הריון:</strong> הכי נוח ואמיתי! תפריט יומי = אוכל טרי שהוכן בבוקר. שאלו מה יש ובקשו "bien cocido".</p><div class="hrs">⏰ שני-שישי 13:00-16:00 בלבד · סגור ערבים וסופ"ש</div></div>
       </div>
       <div class="tags" style="margin-top:10px;"><span class="tag to">היסטוריה</span><span class="tag tg">שקט ורגוע</span><span class="tag tb">40 דק' ברכבת</span></div>
     </div>
@@ -857,8 +907,11 @@
       </div>
       <div class="c-do" style="margin-top:10px;">
         <h4>🅿️ חניות בפנדס / Vilafranca:</h4>
-        <div class="do-item">🟢 <span><strong>Parking Freixenet</strong> - ליד הייקב · חינם לביקור</span></div>
-        <div class="do-item">🟢 <span><strong>Plaça de la Vila, Vilafranca</strong> - מרכז העיר · €0.80/שעה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Freixenet</strong> - ליד הייקב · חינם לכל המבקרים</span></div>
+        <div class="do-item">🔵 <span><strong>Plaça de la Vila, Vilafranca</strong> - מרכז Vilafranca · €0.80/שעה</span></div>
+        <div class="do-item">🔵 <span><strong>Parking Mercat</strong> - ליד השוק · €1/שעה · קרוב לכל</span></div>
+        <div class="do-item">🟢 <span><strong>Carrer de la Cort</strong> - Vilafranca · חניה חינמית ללא הגבלה</span></div>
+        <div class="do-item">🟢 <span><strong>Parking Cal Blay</strong> - ליד המסעדה · חינם לסועדים</span></div>
         <div class="do-item">💡 <span>באזור הכפרי יש הרבה חניה חינמית ליד הכרמים</span></div>
       </div>
       <div id="parkMapPen" style="height:180px;border-radius:12px;margin-top:10px;"></div>
@@ -878,6 +931,21 @@
         <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#764ba2,#667eea);"></div>
         <div class="rest-body"><h3>Restaurant Freixenet</h3><div class="addr">📍 Joan Sala 2, Sant Sadurní d'Anoia</div><div class="desc">מסעדה בתוך הייקב המפורסם - ארוחה + סיור</div><div class="tags"><span class="tag tg">בתוך הייקב</span><span class="tag tb">חוויה ייחודית</span></div></div><div class="rest-arrow">▼</div></div>
         <div class="rest-detail"><p><strong>להזמין:</strong> תפריט קבוע כולל: סלטים, פסטה, עוף, קינוחים. מיץ ענבים טרי במקום קאווה!</p><p><strong>טיפ הריון:</strong> בקשו "zumo de uva sin alcohol" - מיץ ענבים טבעי. הסיור בתת-קרקע מרתק ומוצל - נעים גם בחום!</p><div class="hrs">⏰ שני-שבת 13:00-16:00 · סיורים 10:00-18:00</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#2e7d32,#388e3c);"></div>
+        <div class="rest-body"><h3>Fonda Neus</h3><div class="addr">📍 Carrer de la Palma 6, Vilafranca del Penedès</div><div class="desc">מסעדה מסורתית ב-Vilafranca - בישול כפרי קטלאני אמיתי</div><div class="tags"><span class="tag tg">כפרי קטלאני</span><span class="tag tp">מחיר נוח</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Escudella i carn d'olla (מרק כבד עם בשר), botifarra amb mongetes (נקניק עם שעועית), pollo de corral (עוף כפרי בתנור).</p><p><strong>טיפ הריון:</strong> המרק הכי מזין ומנחם שתמצאו - מושלם להריון! הכל מבושל שעות. בקשו "carn ben cuita".</p><div class="hrs">⏰ שני-שבת 13:00-15:30 | שישי-שבת גם 20:30-22:30</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#795548,#8d6e63);"></div>
+        <div class="rest-body"><h3>Mas Comangau</h3><div class="addr">📍 Mas Comangau s/n, Begues</div><div class="desc">מסיה קטלאנית ביערות - ארוחות גורמה עם נוף לטבע</div><div class="tags"><span class="tag tg">מסיה קטלאנית</span><span class="tag tb">טבע</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> ירקות מהגינה, פסטה ביתית, פטריות עונה, בשר כפרי בתנור, גבינות מקומיות.</p><p><strong>טיפ הריון:</strong> מקום מהקסם - שקט מוחלט ביערות. ניתן להסתובב בגינה לפני האוכל. הזמינו שבוע מראש - מאוד מבוקש!</p><div class="hrs">⏰ שבת-ראשון 13:30-16:00 בלבד · רזרבציה חובה</div></div>
+      </div>
+      <div class="rest" onclick="toggle(this)" style="margin-bottom:8px;">
+        <div class="rest-inner"><div class="rest-bar" style="background:linear-gradient(#0097a7,#00acc1);"></div>
+        <div class="rest-body"><h3>La Cuina de l'Era</h3><div class="addr">📍 Plaça de la Vila 6, Vilafranca del Penedès</div><div class="desc">מסעדה בכיכר המרכזית - מטבח קטלאני עם חומרי גלם מקומיים</div><div class="tags"><span class="tag tg">מקומי</span><span class="tag tp">כיכר מרכזית</span></div></div><div class="rest-arrow">▼</div></div>
+        <div class="rest-detail"><p><strong>להזמין:</strong> Pa amb tomàquet (לחם עם עגבנייה - הבסיס!), truita de patates, caragols (חילזונות - רק אם מבושלים!), crema catalana.</p><p><strong>טיפ הריון:</strong> הנמנעים: לא מבושל. כל השאר מצוין! הכיכר מוצלת בצהריים - נעים לשבת בחוץ.</p><div class="hrs">⏰ שלישי-ראשון 12:30-16:00 | 20:00-23:00</div></div>
       </div>
       <div class="tags" style="margin-top:10px;"><span class="tag tg">מיץ ענבים לא יין!</span><span class="tag tb">ברכב</span></div>
     </div>
@@ -1779,10 +1847,16 @@ function toggleCity(el){
         {lat:41.2355,lon:1.8060,e:'🔥',c:'#e63950',n:'El Xalet',i:'קטלאני מסורתי · רומנטי'},
         {lat:41.2365,lon:1.8080,e:'🥘',c:'#4caf50',n:'Bar Voramar',i:'מקומי אמיתי · כרוקטות'},
         {lat:41.2370,lon:1.8055,e:'🍚',c:'#ff9800',n:'La Nansa',i:'פאייה ביתית · מצוינת'},
+        {lat:41.2375,lon:1.8065,e:'🍽️',c:'#9c27b0',n:'La Sima',i:'קטלאני אינטימי · מנות עונה'},
+        {lat:41.2385,lon:1.8050,e:'☕',c:'#00897b',n:'Picnic Restaurant',i:'ברנץ\' בריא · אבוקדו טוסט'},
       ]);
-      mapRefs.parkSitges=buildMap('parkMapSitges',[41.2387,1.8056],15,[
-        {lat:41.2360,lon:1.8065,e:'🅿️',c:'#1565c0',n:'Parking Platja',i:'ליד החוף · €2/שעה'},
-        {lat:41.2368,lon:1.8045,e:'🅿️',c:'#1565c0',n:'Parking Estació',i:'ליד הרכבת · €1.20/שעה'},
+      mapRefs.parkSitges=buildMap('parkMapSitges',[41.2375,1.8060],15,[
+        {lat:41.2360,lon:1.8065,e:'🅿️',c:'#1565c0',n:'Parking Platja',i:'ליד החוף הראשי · €2/שעה · 200 מקומות'},
+        {lat:41.2368,lon:1.8045,e:'🅿️',c:'#1565c0',n:'Parking Estació',i:'ליד תחנת הרכבת · €1.20/שעה'},
+        {lat:41.2380,lon:1.8070,e:'🅿️',c:'#1565c0',n:'Parking Espanya',i:'Carrer dʼEspanya · €1.50/שעה'},
+        {lat:41.2355,lon:1.8055,e:'🅿️',c:'#1565c0',n:'Parking Ribera',i:'ליד הטיילת · €2.50/שעה'},
+        {lat:41.2390,lon:1.8040,e:'🅿️',c:'#388e3c',n:'Carrer de Jesús - חינם',i:'חניה ברחוב · חינם אחרי 20:00'},
+        {lat:41.2400,lon:1.8030,e:'🅿️',c:'#388e3c',n:'Zona blava - כחול',i:'Carrer Major · €1/שעה · 2 שעות מקסימום'},
         {lat:41.2387,lon:1.8056,e:'🚆',c:'#e63950',n:'תחנת רכבת Sitges',i:'R2S · 10 דק\' מוילאנובה'},
       ]);
     }
@@ -1793,13 +1867,20 @@ function toggleCity(el){
         {lat:41.3913,lon:2.1611,e:'🍺',c:'#ff9800',n:'Cervecería Catalana',i:'טאפאס קלאסיות · אשמפלה'},
         {lat:41.3758,lon:2.1868,e:'🦐',c:'#2ec4b6',n:'Can Solé',i:'דגים מ-1903 · ברצלונטה'},
         {lat:41.4006,lon:2.1542,e:'🥗',c:'#4caf50',n:'La Pepita Gràcia',i:'בריא וטעים · גראסיה'},
+        {lat:41.3817,lon:2.1745,e:'🎨',c:'#1565c0',n:'Els Quatre Gats',i:'מ-1897 · ביקר פיקאסו'},
+        {lat:41.3806,lon:2.1724,e:'🛒',c:'#d81b60',n:'Pinotxo Bar - Boqueria',i:'שוק בוקריה · ארוחת בוקר'},
+        {lat:41.3744,lon:2.1870,e:'💣',c:'#f57f17',n:'La Cova Fumada',i:'ממציאי הבומבה · מקומי'},
       ]);
       mapRefs.parkBcn=buildMap('parkMapBcn',[41.3851,2.1734],13,[
-        {lat:41.3790,lon:2.1403,e:'🅿️',c:'#1565c0',n:'BSM Sants',i:'ליד התחנה המרכזית · €3/שעה'},
-        {lat:41.3918,lon:2.1649,e:'🅿️',c:'#1565c0',n:'SABA Passeig de Gràcia',i:'מרכז · €4/שעה'},
-        {lat:41.3790,lon:2.1905,e:'🅿️',c:'#1565c0',n:'Parking Barceloneta',i:'ליד החוף · €2.50/שעה'},
-        {lat:41.4036,lon:2.1744,e:'🅿️',c:'#1565c0',n:'Parking Sagrada Família',i:'€3.50/שעה'},
-        {lat:41.3790,lon:2.1403,e:'🚆',c:'#e63950',n:'Sants - תחנה מרכזית',i:'רכבות לכל ספרד'},
+        {lat:41.3790,lon:2.1403,e:'🅿️',c:'#1565c0',n:'BSM Sants',i:'ליד תחנת Sants · €3/שעה · 24/7'},
+        {lat:41.3918,lon:2.1649,e:'🅿️',c:'#1565c0',n:'SABA Passeig de Gràcia',i:'מרכז · €4/שעה · ליד גאודי'},
+        {lat:41.3760,lon:2.1905,e:'🅿️',c:'#1565c0',n:'Parking Barceloneta',i:'ליד החוף · €2.50/שעה'},
+        {lat:41.4036,lon:2.1744,e:'🅿️',c:'#1565c0',n:'Parking Sagrada Família',i:'Carrer de Provença · €3.50/שעה'},
+        {lat:41.3826,lon:2.1769,e:'🅿️',c:'#1565c0',n:'Parking Urquinaona',i:'מרכז · €3.50/שעה · קרוב לגותית'},
+        {lat:41.3761,lon:2.1726,e:'🅿️',c:'#1565c0',n:'Parking Port Olímpic',i:'ליד הנמל האולימפי · €2/שעה'},
+        {lat:41.4014,lon:2.1539,e:'🅿️',c:'#1565c0',n:'Parking Gràcia',i:'שכונת גראסיה · €2.50/שעה'},
+        {lat:41.3874,lon:2.1686,e:'🅿️',c:'#388e3c',n:'Parking Plaça Catalunya',i:'מרכז העיר · €4/שעה · 24/7'},
+        {lat:41.3790,lon:2.1403,e:'🚆',c:'#e63950',n:'Sants - תחנה מרכזית',i:'רכבת מוילאנובה · 45 דק\''},
       ]);
     }
     if(name.includes('טרגונה') && !mapRefs.parkTarr){
@@ -1807,12 +1888,19 @@ function toggleCity(el){
         {lat:41.1215,lon:1.2380,e:'🐟',c:'#2ec4b6',n:'Sol Ric',i:'רומסקו · טרגוני אמיתי'},
         {lat:41.1142,lon:1.2540,e:'⚓',c:'#e63950',n:'El Serrallo',i:'שכונת דייגים · דגים טריים'},
         {lat:41.1190,lon:1.2447,e:'🥘',c:'#4caf50',n:'Morgana',i:'מודרני · ליד האמפיתיאטרון'},
+        {lat:41.1138,lon:1.2535,e:'🌊',c:'#0288d1',n:'El Llagut',i:'פירות ים טריים · El Serrallo'},
+        {lat:41.1185,lon:1.2450,e:'⭐',c:'#e65100',n:'AQ Restaurant',i:'שף יוקרתי · גורמה'},
+        {lat:41.1172,lon:1.2468,e:'🍲',c:'#558b2f',n:'Barquet Tarragona',i:'תפריט יומי · €12-15'},
       ]);
-      mapRefs.parkTarr=buildMap('parkMapTarr',[41.1189,1.2445],14,[
+      mapRefs.parkTarr=buildMap('parkMapTarr',[41.1170,1.2490],14,[
         {lat:41.1175,lon:1.2488,e:'🅿️',c:'#1565c0',n:'Parking Amfiteatre',i:'ליד האמפיתיאטרון · €1.50/שעה'},
-        {lat:41.1142,lon:1.2540,e:'🅿️',c:'#1565c0',n:'Parking Port',i:'ליד הנמל · €1/שעה'},
+        {lat:41.1142,lon:1.2540,e:'🅿️',c:'#1565c0',n:'Parking Port Pesquer',i:'נמל הדייגים · €1/שעה · 24/7'},
+        {lat:41.1197,lon:1.2440,e:'🅿️',c:'#1565c0',n:'Parking Centre Comercial',i:'מרכז קניות · €1.20/שעה'},
+        {lat:41.1155,lon:1.2508,e:'🅿️',c:'#1565c0',n:'Parking Rambla Nova',i:'הרמבלה הראשית · €1.80/שעה'},
+        {lat:41.1185,lon:1.2460,e:'🅿️',c:'#388e3c',n:'Plaça de la Font - חינם',i:'כיכר מרכזית · חניה חינמית לילה'},
+        {lat:41.1210,lon:1.2430,e:'🅿️',c:'#388e3c',n:'Zona verda - ירוק',i:'תושבים + תיירים · €0.80/שעה'},
         {lat:41.1189,lon:1.2445,e:'🏛️',c:'#f4a261',n:'Amfiteatre Romà',i:'אמפיתיאטרון רומי · על הים'},
-        {lat:41.1177,lon:1.2460,e:'🚆',c:'#e63950',n:'תחנת רכבת Tarragona',i:'40 דק\' מוילאנובה'},
+        {lat:41.1177,lon:1.2460,e:'🚆',c:'#e63950',n:'תחנת רכבת Tarragona',i:'40 דק\' מוילאנובה · ~€6'},
       ]);
     }
     if(name.includes('פנדס') && !mapRefs.parkPen){
@@ -1820,11 +1908,17 @@ function toggleCity(el){
         {lat:41.2830,lon:1.7660,e:'🌿',c:'#4caf50',n:'Cal Blay',i:'שף מקומי · מוצרים כפריים'},
         {lat:41.2900,lon:1.7200,e:'🏡',c:'#e63950',n:'Casa Pardet',i:'חווה כפרית · נוף לכרמים'},
         {lat:41.4282,lon:1.7880,e:'🍇',c:'#764ba2',n:'Restaurant Freixenet',i:'בתוך הייקב · מיץ ענבים'},
+        {lat:41.3464,lon:1.5735,e:'🍲',c:'#2e7d32',n:'Fonda Neus',i:'מסורתי קטלאני · Vilafranca'},
+        {lat:41.2850,lon:1.8100,e:'🌲',c:'#795548',n:'Mas Comangau',i:'מסיה ביערות · שקט מוחלט'},
+        {lat:41.3463,lon:1.5730,e:'🏛️',c:'#0097a7',n:'La Cuina de l\'Era',i:'כיכר מרכזית · Vilafranca'},
       ]);
-      mapRefs.parkPen=buildMap('parkMapPen',[41.3464,1.5728],13,[
-        {lat:41.3431,lon:1.7005,e:'🅿️',c:'#1565c0',n:'Parking Freixenet',i:'ליד הייקב · חינם לביקור'},
-        {lat:41.3464,lon:1.5728,e:'🅿️',c:'#1565c0',n:"Plaça de la Vila",i:'Vilafranca · €0.80/שעה'},
-        {lat:41.3431,lon:1.7005,e:'🍇',c:'#4caf50',n:'Freixenet Winery',i:'ייקב מפורסם · סיור עם רכבת'},
+      mapRefs.parkPen=buildMap('parkMapPen',[41.3464,1.6400],12,[
+        {lat:41.3431,lon:1.7005,e:'🅿️',c:'#388e3c',n:'Parking Freixenet - חינם',i:'ליד הייקב · חינם לכל מבקרים'},
+        {lat:41.3464,lon:1.5728,e:'🅿️',c:'#1565c0',n:"Plaça de la Vila, Vilafranca",i:'מרכז Vilafranca · €0.80/שעה'},
+        {lat:41.3450,lon:1.5740,e:'🅿️',c:'#1565c0',n:'Parking Mercat, Vilafranca',i:'ליד השוק · €1/שעה · קרוב לכל'},
+        {lat:41.3440,lon:1.5720,e:'🅿️',c:'#388e3c',n:'Carrer de la Cort - חינם',i:'Vilafranca · חניה חינמית · ללא הגבלה'},
+        {lat:41.2830,lon:1.7660,e:'🅿️',c:'#388e3c',n:'Parking Cal Blay - חינם',i:'ליד המסעדה · חניה חינמית לסועדים'},
+        {lat:41.3431,lon:1.7005,e:'🍇',c:'#4caf50',n:'Freixenet Winery',i:'ייקב מפורסם · סיור עם רכבת מיניאטורית'},
       ]);
     }
   },80);
