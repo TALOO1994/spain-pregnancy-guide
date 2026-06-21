@@ -347,10 +347,20 @@
   <button class="tab"     onclick="go('trans',this)">🚆 תחבורה</button>
   <button class="tab"     onclick="go('tips',this)">💡 טיפים</button>
   <button class="tab"     onclick="go('med',this)">🏥 רפואי</button>
+  <button class="tab"     onclick="go('fest',this)">🎵 פסטיבל</button>
 </div>
 
 <!-- ══════════════ HOME ══════════════ -->
 <div class="sec on" id="sec-home">
+  <!-- FESTIVAL BANNER -->
+  <div onclick="go('fest',document.querySelectorAll('.tab')[9])" style="cursor:pointer;background:linear-gradient(135deg,#6a0dad,#e63950);border-radius:16px;padding:15px 16px;margin-bottom:12px;color:white;display:flex;align-items:center;gap:12px;">
+    <div style="font-size:2rem;flex-shrink:0;">🎵</div>
+    <div>
+      <div style="font-weight:800;font-size:0.97rem;margin-bottom:2px;">Vida Festival 2026 - שבוע הבא!</div>
+      <div style="font-size:0.79rem;opacity:.88;">2–4 ביולי · Fatboy Slim, Guitarricadelafuente ועוד 60 אמנים · וילאנובה</div>
+      <div style="font-size:0.74rem;opacity:.75;margin-top:3px;">לחצו לפרטים מלאים ←</div>
+    </div>
+  </div>
   <div class="al al-ok"><div class="ai">✅</div><div><strong>שבוע 12 מושלם לנסיעה!</strong> הבחילות פוחתות, הסיכון יורד. תהנו בספרד!</div></div>
   <div class="al al-w"><div class="ai">⚠️</div><div><strong>זכרו:</strong> אין סושי, גבינות רכות, חמב"ש, אלכוהול. שתו הרבה מים - ספרד חמה!</div></div>
   <div class="sec-hd"><h2>מה תרצו?</h2></div>
@@ -924,6 +934,156 @@
   </div>
 </div>
 
+<!-- ══════════════ FESTIVAL ══════════════ -->
+<div class="sec" id="sec-fest">
+  <div class="sec-hd"><h2>🎵 Vida Festival 2026</h2><p>2–4 ביולי · וילאנובה אי לה גלטרו</p></div>
+
+  <!-- MAIN CARD -->
+  <div style="background:linear-gradient(135deg,#6a0dad,#e63950);border-radius:18px;padding:20px;color:white;margin-bottom:14px;">
+    <div style="font-size:1.1rem;font-weight:900;margin-bottom:6px;">Vida Festival 2026</div>
+    <div style="font-size:0.82rem;opacity:.88;line-height:1.6;">
+      פסטיבל המוזיקה הגדול של וילאנובה · יער החוף · 60+ אמנים · 3 ימים<br>
+      📍 Parc de la Bassa de les Granotes, Vilanova i la Geltrú
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+      <span style="background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:700;">📅 2–4 ביולי 2026</span>
+      <span style="background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:700;">🎤 60+ אמנים</span>
+      <span style="background:rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:700;">🌲 יער פינוס</span>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#f3e5f5;">📅</div><h3>לו"ז ושעות</h3></div>
+
+    <div style="border-bottom:1px solid #f5f2ee;padding:10px 0;">
+      <div style="font-weight:800;font-size:0.92rem;color:#6a0dad;">יום חמישי 2 ביולי</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;line-height:1.6;">
+        🕔 <strong>16:00</strong> – שערים נפתחים<br>
+        🕕 <strong>17:00</strong> – מופעי פתיחה בשלוש במות<br>
+        🕘 <strong>21:00</strong> – הופעות ראשיות מתחילות<br>
+        🕛 <strong>00:30</strong> – סגירת השער הראשי
+      </div>
+    </div>
+
+    <div style="border-bottom:1px solid #f5f2ee;padding:10px 0;">
+      <div style="font-weight:800;font-size:0.92rem;color:#e63950;">יום שישי 3 ביולי</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;line-height:1.6;">
+        🕔 <strong>15:00</strong> – שערים נפתחים<br>
+        🕔 <strong>16:00</strong> – מופעים מוקדמים<br>
+        🕘 <strong>21:30</strong> – Fatboy Slim &amp; Guitarricadelafuente<br>
+        🕛 <strong>01:00</strong> – סגירה
+      </div>
+    </div>
+
+    <div style="padding:10px 0;">
+      <div style="font-weight:800;font-size:0.92rem;color:#f4a261;">יום שבת 4 ביולי</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-top:4px;line-height:1.6;">
+        🕔 <strong>15:00</strong> – שערים נפתחים<br>
+        🕔 <strong>16:00</strong> – מופעים מוקדמים<br>
+        🕘 <strong>22:00</strong> – הופעת סיום - Amaia &amp; Charlotte Cardin<br>
+        🕛 <strong>00:30</strong> – סגירה
+      </div>
+    </div>
+  </div>
+
+  <!-- LINEUP -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fce4ec;">🎤</div><h3>אמנים מרכזיים</h3></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Fatboy Slim</div>
+        <div style="font-size:0.74rem;color:var(--muted);">ד"ג אגדי · UK · DJ Set</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Guitarricadelafuente</div>
+        <div style="font-size:0.74rem;color:var(--muted);">פופ ספרדי · קסטיליה</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Amaia</div>
+        <div style="font-size:0.74rem;color:var(--muted);">אינדי פופ ספרדי</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Charlotte Cardin</div>
+        <div style="font-size:0.74rem;color:var(--muted);">פופ קנדי · חזק!</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Aldous Harding</div>
+        <div style="font-size:0.74rem;color:var(--muted);">אינדי / פולק · ניו זילנד</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Nu Genea</div>
+        <div style="font-size:0.74rem;color:var(--muted);">אלקטרו איטלקי</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Saint Etienne</div>
+        <div style="font-size:0.74rem;color:var(--muted);">פופ בריטי קלאסי</div>
+      </div>
+      <div style="background:#f8f5f2;border-radius:10px;padding:10px;">
+        <div style="font-weight:800;font-size:0.85rem;">Osees</div>
+        <div style="font-size:0.74rim;color:var(--muted);">רוק גראז' אמריקאי</div>
+      </div>
+    </div>
+    <div style="font-size:0.75rem;color:var(--muted);margin-top:10px;text-align:center;">+ עוד 52 אמנים · 3 במות במקביל</div>
+  </div>
+
+  <!-- PREGNANCY TIPS FOR FESTIVAL -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e8f5e9;">🤰</div><h3>טיפים לפסטיבל בהריון שבוע 12</h3></div>
+    <div class="tip">
+      <div class="tip-n">1</div>
+      <div><h4>הגיעו מוקדם - אל תתעייפו</h4><p>הגיעו בשעה הראשונה כשהפסטיבל פחות עמוס. קחו מקום יושב עם גישה טובה, אל תעמדו שעות ברצף.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">2</div>
+      <div><h4>מים, מים, מים</h4><p>יולי בספרד = חום קשה. בהריון מתחממים מהר יותר. שתו לפחות 3 ליטר ביום פסטיבל. יש ברזי מים חינם באתר.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">3</div>
+      <div><h4>אוזניות מגן - חשוב!</h4><p>רמות הרעש בפסטיבל גבוהות מאוד. בשבוע 12 הבייבי מתחיל לשמוע. ממליצים על אוזניות מגן בזמן ההופעות.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">4</div>
+      <div><h4>אל תעמדו מול הבמה</h4><p>עמוס ודחוס מדי. עמדו/שבו בקצה, יש מסך ענק. הרבה יותר נוח ובטוח בהריון.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">5</div>
+      <div><h4>אוכל - לשאול לפני</h4><p>יש הרבה דוכני אוכל. שאלו תמיד על רכיבים. הימנעו מדוכנים עם דגים נאים, גבינות רכות, או כוסות אלכוהול. פיצה, פסטה, גריל - בסדר.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">6</div>
+      <div><h4>כסא מתקפל / שמיכה</h4><p>הפסטיבל ביער עם דשא. הביאו שמיכה לשבת - הרבה יותר נוח מעמידה. מגבת רכה ממש מומלצת.</p></div>
+    </div>
+    <div class="tip">
+      <div class="tip-n">7</div>
+      <div><h4>יציאה לפני הסוף</h4><p>אל תחכו לסגירה - יציאה בו-זמנית של אלפי אנשים קשה. צאו 20 דקות לפני סוף ההופעה האחרונה.</p></div>
+    </div>
+  </div>
+
+  <!-- HOW TO GET THERE -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e3f2fd;">🗺️</div><h3>איך מגיעים לפסטיבל</h3></div>
+    <div class="t-row">
+      <div class="t-ic" style="background:#e8f5e9;">🚶</div>
+      <div class="t-txt"><h4>רגלי מהעיר</h4><p>פארק Bassa de les Granotes נמצא 15-20 דקות הליכה ממרכז וילאנובה. הדרך מוצלת וקלה.</p></div>
+      <div class="t-bdg" style="background:#e8f5e9;color:#2e7d32;">מומלץ</div>
+    </div>
+    <div class="t-row">
+      <div class="t-ic" style="background:#e3f2fd;">🚕</div>
+      <div class="t-txt"><h4>מונית / Cabify</h4><p>מהעיר ל-Parc de la Bassa - ~€5-8. מומלץ להריון, במיוחד בשעות מאוחרות.</p></div>
+      <div class="t-bdg">5 דקות</div>
+    </div>
+    <div class="t-row">
+      <div class="t-ic" style="background:#fff3e0;">🚌</div>
+      <div class="t-txt"><h4>שאטל פסטיבל</h4><p>בדרך כלל יש אוטובוסים מיוחדים מתחנת הרכבת לפסטיבל בימי הפסטיבל. בדקו באתר הפסטיבל.</p></div>
+      <div class="t-bdg">חינם</div>
+    </div>
+  </div>
+
+  <div class="al al-w"><div class="ai">⚠️</div><div><strong>זכרו:</strong> חום יולי בספרד מגיע ל-30°C+. כובע חובה, ישיבה בצל, אל תישארו יותר מ-4-5 שעות.</div></div>
+  <div class="al al-ok"><div class="ai">✅</div><div>פסטיבל Vida ידוע בפחות עומס מפסטיבלים אחרים - אווירה רגועה, יערית ונעימה. מתאים לזוגות!</div></div>
+</div>
+
 <footer>מדריך ספרד להריון · וילאנובה אי לה גלטרו · נסיעה נעימה!<br>המידע כללי בלבד - התייעצו עם הרופא שלכם</footer>
 
 <script>
@@ -1315,7 +1475,7 @@ function gotoResult(tab, title) {
   closeSearch();
   document.getElementById('searchQ').value = '';
   const tabs = document.querySelectorAll('.tab');
-  const tabMap = {home:0,rest:1,attr:2,cities:3,shops:4,plan:5,trans:6,tips:7,med:8};
+  const tabMap = {home:0,rest:1,attr:2,cities:3,shops:4,plan:5,trans:6,tips:7,med:8,fest:9};
   go(tab, tabs[tabMap[tab] || 0]);
   if (!title) return;
   setTimeout(() => {
