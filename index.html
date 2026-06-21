@@ -385,6 +385,7 @@
 <!-- ══════════════ RESTAURANTS ══════════════ -->
 <div class="sec" id="sec-rest">
   <div class="sec-hd"><h2>מסעדות מומלצות</h2><p>וילאנובה · מתאים להריון שבוע 12</p></div>
+  <div id="restMapEl" style="height:220px;border-radius:var(--r);margin-bottom:12px;z-index:1;"></div>
   <div class="al al-w"><div class="ai">🚫</div><div>הימנעו מ: סושי, חמב"ש, גבינות רכות, איולי ביתי, אלכוהול, ביצים חיות</div></div>
 
   <div class="rest" onclick="toggle(this)">
@@ -459,6 +460,142 @@
     </div>
   </div>
 
+  <!-- GOOGLE MAP - RESTAURANTS -->
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e3f2fd;">🗺️</div><h3>מפת מסעדות - חפשו סביבכם</h3></div>
+    <p style="font-size:0.79rem;color:var(--muted);margin-bottom:10px;">מסעדות מומלצות בוילאנובה ובסביבה</p>
+    <iframe src="https://maps.google.com/maps?q=restaurants+Vilanova+i+la+Geltrú&output=embed&hl=iw&z=15" width="100%" height="260" style="border:0;border-radius:14px;" allowfullscreen loading="lazy"></iframe>
+  </div>
+
+  <!-- SITGES RESTAURANTS -->
+  <div class="sec-hd" style="margin-top:6px;"><h2>🏖️ מסעדות בסיטג'ס</h2><p>לביקור יום · 10 דקות ברכבת</p></div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#2ec4b6,#0077b6);"></div>
+      <div class="rest-body">
+        <h3>El Xalet</h3>
+        <div class="addr">📍 Carrer de la Illa de Cuba 35, Sitges</div>
+        <div class="desc">מסעדה מסורתית קטלאנית בווילה עתיקה - אחת הטובות בסיטג'ס</div>
+        <div class="tags"><span class="tag tg">קטלאני מסורתי</span><span class="tag tb">רומנטי</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> עוף בתנור עם ירקות, דגים בתנור, אורז מרינרה מבושל, קציצות קטלאניות (mandonguilles).</p>
+      <p><strong>טיפ הריון:</strong> מטבח ים תיכוני אמיתי, הכל מבושל היטב. בקשו "bien hecho" לכל מנת בשר.</p>
+      <div class="hrs">⏰ שלישי-ראשון 13:30-16:00 | 20:30-23:00</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#4caf50,#8bc34a);"></div>
+      <div class="rest-body">
+        <h3>Fragata</h3>
+        <div class="addr">📍 Passeig de la Ribera 1, Sitges · על הטיילת</div>
+        <div class="desc">מסעדת דגים ופירות ים עם נוף ישיר לים</div>
+        <div class="tags"><span class="tag tg">דגים טריים</span><span class="tag tb">על הים</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> פאייה מרינרה (פירות ים מבושלים), דג שלם בתנור, גמבאס גריל.</p>
+      <p><strong>טיפ הריון:</strong> מושלם - דגים טריים ומבושלים. בקשו שולחן בחוץ עם צל ונוף לים.</p>
+      <div class="hrs">⏰ כל הימים 13:00-16:00 | 20:00-23:00</div>
+    </div>
+  </div>
+
+  <!-- BARCELONA RESTAURANTS -->
+  <div class="sec-hd" style="margin-top:6px;"><h2>🏙️ מסעדות בברצלונה</h2><p>לביקור יום · 45 דקות ברכבת</p></div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#764ba2,#667eea);"></div>
+      <div class="rest-body">
+        <h3>Bar del Pla</h3>
+        <div class="addr">📍 Carrer de la Montcada 2, ברצלונה · שכונה גותית</div>
+        <div class="desc">ביסטרו קטלאני אהוב - טאפאס מודרניות, אנטיפסטים, אווירה</div>
+        <div class="tags"><span class="tag tg">טאפאס מודרניות</span><span class="tag tp">אהוב מקומיים</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> כרוקטות עוף, פטאטאס בראבאס, טורטייה, גמבאס, עוף גריל.</p>
+      <p><strong>טיפ הריון:</strong> מגוון גדול - תמיד יש מנות בטוחות. אל תזמינו איולי. מחיר נוח מאוד לברצלונה.</p>
+      <div class="hrs">⏰ שני-ראשון 12:00-23:30 · פתוח ברצף</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#e63950,#f4a261);"></div>
+      <div class="rest-body">
+        <h3>La Mar Salada</h3>
+        <div class="addr">📍 Passeig de Joan de Borbó 58, ברצלונה · ברצלונטה</div>
+        <div class="desc">מסעדת דגים מובחרת ליד חוף ברצלונטה - פאייה מפורסמת</div>
+        <div class="tags"><span class="tag tg">פאייה מושלמת</span><span class="tag tb">ליד הים</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> Arroz a banda (אורז בציר דגים), פאייה מרינרה, פידאואה, פירות ים מבושלים.</p>
+      <p><strong>טיפ הריון:</strong> הפאייה מבושלת היטב - מושלמת. הזמינו מינימום 2 אנשים. הזמינו שולחן!</p>
+      <div class="hrs">⏰ שלישי-ראשון 13:00-16:00 | 20:00-23:00 · סגור שני</div>
+    </div>
+  </div>
+
+  <div class="rest" onclick="toggle(this)">
+    <div class="rest-inner">
+      <div class="rest-bar" style="background:linear-gradient(#ff9800,#f57c00);"></div>
+      <div class="rest-body">
+        <h3>Cervecería Catalana</h3>
+        <div class="addr">📍 Carrer de Mallorca 236, ברצלונה · אשמפלה</div>
+        <div class="desc">ברר טאפאס פופולרי מאוד - פין-פין, כרוקטות, פטאטאס</div>
+        <div class="tags"><span class="tag tg">טאפאס קלאסיות</span><span class="tag tp">מחיר נוח</span></div>
+      </div>
+      <div class="rest-arrow">▼</div>
+    </div>
+    <div class="rest-detail">
+      <p><strong>להזמין:</strong> Pin pinchos (פין-פינצ'וס), כרוקטות שפינת, טורטייה, פטאטאס בראבאס, גמבאס.</p>
+      <p><strong>טיפ הריון:</strong> מאוד עמוס - הגיעו מוקדם (13:00) לפני התור. עמדו בצד עם כסא.</p>
+      <div class="hrs">⏰ כל הימים 09:00-01:30 · תמיד פתוח</div>
+    </div>
+  </div>
+
+  <!-- PARKING -->
+  <div class="sec-hd" style="margin-top:6px;"><h2>🅿️ חניות בערים</h2><p>מידע חניה לכל עיר</p></div>
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e3f2fd;">🅿️</div><h3>חניות - וילאנובה</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>Aparcament Municipal del Centre</h4><p>Carrer de l'Estació · ליד הרמבלה · €1.50/שעה</p></div><div class="t-bdg" style="background:#e8f5e9;color:#2e7d32;">מומלץ</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>חניה ליד תחנת הרכבת</h4><p>Plaça de l'Estació · חינם · 10 דקות לחוף</p></div><div class="t-bdg" style="background:#e8f5e9;color:#2e7d32;">חינם</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#fff3e0;">🟡</div><div class="t-txt"><h4>חניה ליד הנמל</h4><p>Port de Vilanova · €1/שעה · קרוב למסעדות</p></div><div class="t-bdg">€1/שעה</div></div>
+    <iframe src="https://maps.google.com/maps?q=parking+Vilanova+i+la+Geltrú&output=embed&hl=iw&z=14" width="100%" height="200" style="border:0;border-radius:12px;margin-top:10px;" allowfullscreen loading="lazy"></iframe>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#e0f7fa;">🅿️</div><h3>חניות - סיטג'ס</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>Aparcament Platja</h4><p>ליד החוף הראשי · €2/שעה · קרוב לכל</p></div><div class="t-bdg">€2/שעה</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>Aparcament Estació</h4><p>ליד תחנת הרכבת · €1.20/שעה · 5 דקות להליכה</p></div><div class="t-bdg">€1.20/שעה</div></div>
+    <div class="al al-i" style="margin-top:8px;"><div class="ai">💡</div><div>סיטג'ס עמוסה בקיץ - הגיעו לפני 10:00 לחניה זמינה. עדיף לחנות ולהגיע ברכבת!</div></div>
+    <iframe src="https://maps.google.com/maps?q=parking+Sitges+Spain&output=embed&hl=iw&z=15" width="100%" height="200" style="border:0;border-radius:12px;margin-top:10px;" allowfullscreen loading="lazy"></iframe>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#f3e5f5;">🅿️</div><h3>חניות - ברצלונה</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>BSM Parking Fira</h4><p>ליד Sants · €3/שעה · ממש ליד הרכבת</p></div><div class="t-bdg">€3/שעה</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#fff3e0;">🟡</div><div class="t-txt"><h4>SABA Passeig de Gràcia</h4><p>מרכז ברצלונה · €4/שעה · ליד הגאודי</p></div><div class="t-bdg">€4/שעה</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e3f2fd;">🔵</div><div class="t-txt"><h4>Parking Barceloneta</h4><p>ליד החוף · €2.50/שעה</p></div><div class="t-bdg">€2.50/שעה</div></div>
+    <div class="al al-w" style="margin-top:8px;"><div class="ai">⚠️</div><div>ברצלונה יקרה לחניה. עדיף לנסוע ברכבת מוילאנובה ולחסוך €20-30 ביום!</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><div class="ic" style="background:#fff8e1;">🅿️</div><h3>חניות - טרגונה</h3></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>Parking Centre Tarragona</h4><p>ליד האמפיתיאטרון הרומי · €1.50/שעה</p></div><div class="t-bdg">€1.50/שעה</div></div>
+    <div class="t-row"><div class="t-ic" style="background:#e8f5e9;">🟢</div><div class="t-txt"><h4>Parking Port Tarragona</h4><p>ליד הנמל · €1/שעה · קרוב לחוף</p></div><div class="t-bdg">€1/שעה</div></div>
+    <iframe src="https://maps.google.com/maps?q=parking+Tarragona+Spain&output=embed&hl=iw&z=14" width="100%" height="200" style="border:0;border-radius:12px;margin-top:10px;" allowfullscreen loading="lazy"></iframe>
+  </div>
+
   <div class="card">
     <div class="card-hd"><div class="ic" style="background:#e8f5e9;">🥗</div><h3>מה לאכול / להימנע בספרד</h3></div>
     <div class="food-grid">
@@ -489,6 +626,7 @@
 <!-- ══════════════ ATTRACTIONS ══════════════ -->
 <div class="sec" id="sec-attr">
   <div class="sec-hd"><h2>אטרקציות וחופים</h2><p>וילאנובה · מתאים לשבוע 12</p></div>
+  <div id="attrMapEl" style="height:220px;border-radius:var(--r);margin-bottom:12px;z-index:1;"></div>
   <div class="al al-ok"><div class="ai">🏖️</div><div><strong>שבוע 12:</strong> חופים, מוזיאונים, הליכות קצרות - מצוינים. הימנעו מספורט אתגרי.</div></div>
 
   <div class="attr" onclick="toggleA(this)">
@@ -654,6 +792,20 @@
 <!-- ══════════════ SHOPS ══════════════ -->
 <div class="sec" id="sec-shops">
   <div class="sec-hd"><h2>חנויות בוילאנובה</h2><p>כל מה שצריך לזוג בהריון</p></div>
+
+  <!-- SHOPPING CENTER -->
+  <div class="card" style="background:linear-gradient(135deg,#667eea11,#764ba211);border:2px solid #764ba2;">
+    <div class="card-hd"><div class="ic" style="background:#f3e5f5;">🛒</div><h3>L'Espai - מרכז קניות וילאנובה</h3></div>
+    <p style="font-size:0.81rem;color:var(--muted);line-height:1.55;">המרכז המסחרי הגדול של העיר · Carrer de Francesc Macià · בית קולנוע, חנויות, מסעדות, סופרמרקט - הכל תחת קורת גג אחת עם מיזוג!</p>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-top:10px;">
+      <div style="font-size:0.79rem;padding:6px 10px;background:#f3e5f5;border-radius:8px;">🏬 Zara · H&M · Mango · Primark · חנויות בגדים</div>
+      <div style="font-size:0.79rem;padding:6px 10px;background:#e8f5e9;border-radius:8px;">🧴 Mercadona · El Corte Inglés · סופרמרקט</div>
+      <div style="font-size:0.79rem;padding:6px 10px;background:#e3f2fd;border-radius:8px;">🍽️ Food court · פיצה, המבורגר, סלטים</div>
+      <div style="font-size:0.79rem;padding:6px 10px;background:#fff3e0;border-radius:8px;">👶 Prenatal · Okaidi · בגדי הריון ותינוקות</div>
+    </div>
+    <div class="hrs" style="margin-top:9px;">⏰ שני-שבת 10:00-22:00 · ראשון 11:00-21:00</div>
+    <div class="al al-ok" style="margin-top:9px;"><div class="ai">❄️</div><div>מיזוג מעולה - מושלם לקניות בחום יולי בהריון!</div></div>
+  </div>
 
   <!-- LIVE SEARCH -->
   <div class="shop-search-box">
@@ -909,6 +1061,7 @@
 <!-- ══════════════ MEDICAL ══════════════ -->
 <div class="sec" id="sec-med">
   <div class="sec-hd"><h2>מידע רפואי</h2><p>חירום, בתי חולים, ביטוח</p></div>
+  <div id="medMapEl" style="height:220px;border-radius:var(--r);margin-bottom:12px;z-index:1;"></div>
   <div class="card" style="border:2px solid #ef9a9a;">
     <div class="card-hd" style="color:#c62828;"><div class="ic" style="background:#ffebee;">🚨</div><h3>מספרי חירום ספרד</h3></div>
     <div class="sos-grid">
@@ -1476,6 +1629,9 @@ function go(name,el){
   window.scrollTo({top:0,behavior:'smooth'});
   if(name==='cities')initMap();
   if(name==='fest')initFestMap();
+  if(name==='rest')initRestMap();
+  if(name==='attr')initAttrMap();
+  if(name==='med')initMedMap();
 }
 
 // ── TOGGLES ─────────────────────────────────────────────────
@@ -1711,6 +1867,55 @@ function initMap(){
     });
     L.marker([p.lat,p.lon],{icon}).addTo(map)
       .bindPopup(`<strong>${p.name}</strong><br>${p.info}`);
+  });
+}
+
+// ── RESTAURANTS MAP ─────────────────────────────────────────
+let restMapInited=false;
+function initRestMap(){
+  if(restMapInited)return; restMapInited=true;
+  const m=L.map('restMapEl').setView([41.2245,1.7260],15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
+  [{lat:41.2236,lon:1.7277,e:'🐟',c:'#2ec4b6',n:'1918 Cuina de Mar',i:'דגים על הנמל · מומלץ'},
+   {lat:41.2244,lon:1.7258,e:'🔥',c:'#e63950',n:'La Cova del Foc',i:'קטלאני · תנור עצים'},
+   {lat:41.2248,lon:1.7262,e:'🥘',c:'#4caf50',n:'El Giraldillo',i:'טאפאס קלאסיות'},
+   {lat:41.2246,lon:1.7255,e:'🍕',c:'#ff9800',n:'Gula Gula',i:'פיצה ופסטות'},
+  ].forEach(p=>{
+    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
+    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
+  });
+}
+
+// ── ATTRACTIONS MAP ──────────────────────────────────────────
+let attrMapInited=false;
+function initAttrMap(){
+  if(attrMapInited)return; attrMapInited=true;
+  const m=L.map('attrMapEl').setView([41.2235,1.7250],14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
+  [{lat:41.2210,lon:1.7180,e:'🏖️',c:'#2ec4b6',n:'Platja de Ribes Roges',i:'החוף הראשי · 4 ק"מ'},
+   {lat:41.2243,lon:1.7251,e:'🚂',c:'#764ba2',n:'Museu del Ferrocarril',i:'מוזיאון רכבות · מזגן'},
+   {lat:41.2242,lon:1.7248,e:'🏛️',c:'#e63950',n:'Museu Víctor Balaguer',i:'מוזיאון קטלוני · חינם סופ"ש'},
+   {lat:41.2249,lon:1.7258,e:'🌆',c:'#f4a261',n:'Rambla Principal',i:'שדרה ראשית · קפה · קניות'},
+   {lat:41.2190,lon:1.7290,e:'⚓',c:'#0077b6',n:'Port de Vilanova',i:'נמל · מסעדות · טיילת'},
+  ].forEach(p=>{
+    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
+    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
+  });
+}
+
+// ── MEDICAL MAP ──────────────────────────────────────────────
+let medMapInited=false;
+function initMedMap(){
+  if(medMapInited)return; medMapInited=true;
+  const m=L.map('medMapEl').setView([41.2248,1.7260],14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(m);
+  [{lat:41.2262,lon:1.7202,e:'🏥',c:'#c62828',n:'Hospital Sant Antoni Abat',i:'בית חולים מרכזי · חירום'},
+   {lat:41.2250,lon:1.7255,e:'💊',c:'#2e7d32',n:'Farmacia Granda',i:'בית מרקחת · ויטמינים הריון'},
+   {lat:41.2245,lon:1.7262,e:'💊',c:'#2e7d32',n:'Farmacia Centre',i:'בית מרקחת · מרכז העיר'},
+   {lat:41.2238,lon:1.7270,e:'🚑',c:'#e63950',n:'CAP Vilanova',i:'מרכז רפואי ראשוני · ביטוח'},
+  ].forEach(p=>{
+    const ic=L.divIcon({className:'',html:`<div style="background:${p.c};color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:.9rem;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid white;">${p.e}</div>`,iconSize:[32,32],iconAnchor:[16,16]});
+    L.marker([p.lat,p.lon],{icon:ic}).addTo(m).bindPopup(`<strong>${p.n}</strong><br>${p.i}`);
   });
 }
 
